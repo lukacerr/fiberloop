@@ -1,0 +1,756 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+type IconName =
+	| 'drop'
+	| 'shirt'
+	| 'filter'
+	| 'sensor'
+	| 'phone'
+	| 'qr'
+	| 'map'
+	| 'gift'
+	| 'chart'
+	| 'building'
+	| 'shield'
+	| 'spark';
+
+const iconPaths: Record<IconName, string> = {
+	drop: 'M12 3C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-11z M9 15a3 3 0 0 0 3 3',
+	shirt: 'M8 4l4 2l4-2l5 4l-3 4v8H6v-8L3 8l5-4z M10 5.2a2 2 0 0 0 4 0',
+	filter: 'M4 5h16l-6 7v5l-4 2v-7L4 5z M8 5v-2h8v2',
+	sensor:
+		'M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M6.35 6.35a8 8 0 0 0 0 11.3 M17.65 6.35a8 8 0 0 1 0 11.3',
+	phone:
+		'M9 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M11 18h2',
+	qr: 'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 14h2v4h-2z M14 18h4v2h-4z',
+	map: 'M9 18l-6 3V6l6-3l6 3l6-3v15l-6 3l-6-3z M9 3v15 M15 6v15 M17 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
+	gift: 'M4 11h16v9H4z M4 11V8h16v3 M12 8v12 M9 8a2.5 2.5 0 1 1 3-3c0 1.7 0 3-3 3z M15 8c-3 0-3-1.3-3-3a2.5 2.5 0 1 1 3 3z',
+	chart: 'M4 19h16 M7 16V9 M12 16V5 M17 16v-6',
+	building:
+		'M4 21h16 M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16 M9 8h1 M14 8h1 M9 12h1 M14 12h1 M9 16h1 M14 16h1',
+	shield: 'M12 3l7 3v5c0 5-3 8-7 10c-4-2-7-5-7-10V6l7-3z M9 12l2 2l4-5',
+	spark:
+		'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z M5 17l1 2l2 1l-2 1l-1 2l-1-2l-2-1l2-1l1-2z',
+};
+
+const problemCards = [
+	{
+		icon: 'shirt',
+		title: 'Textiles sintéticos',
+		description:
+			'Poliéster, nylon, acrílico y elastano pueden liberar fibras durante el lavado o secado.',
+	},
+	{
+		icon: 'drop',
+		title: 'Contaminación invisible',
+		description:
+			'Las partículas son pequeñas, difíciles de retener y pueden viajar hacia agua, aire o tratamiento.',
+	},
+	{
+		icon: 'chart',
+		title: 'Impacto acumulado',
+		description:
+			'Una acción cotidiana se vuelve relevante cuando se repite en hogares, edificios e instituciones.',
+	},
+] satisfies Array<{ icon: IconName; title: string; description: string }>;
+
+const steps = [
+	{
+		icon: 'filter',
+		title: 'Filtra',
+		description:
+			'El cartucho se conecta cerca del lavarropas o una salida compatible de secado.',
+	},
+	{
+		icon: 'sensor',
+		title: 'Mide',
+		description:
+			'Sensores estiman flujo, saturación del filtro y riesgo de obstrucción.',
+	},
+	{
+		icon: 'phone',
+		title: 'Avisa',
+		description:
+			'La app muestra estado, historial, alertas y gramos capturados estimados.',
+	},
+	{
+		icon: 'qr',
+		title: 'Cierra el ciclo',
+		description:
+			'El QR registra el cartucho y guía la entrega en puntos de recolección.',
+	},
+] satisfies Array<{ icon: IconName; title: string; description: string }>;
+
+const useCases = [
+	{
+		icon: 'shirt',
+		title: 'Hogar',
+		description:
+			'Pruebas domésticas con instalación simple junto al lavarropas.',
+	},
+	{
+		icon: 'building',
+		title: 'Lavaderos',
+		description: 'Mayor volumen de ciclos para medir impacto agregado.',
+	},
+	{
+		icon: 'map',
+		title: 'Municipios',
+		description: 'Puntos de entrega, incentivos y datos anonimizados por zona.',
+	},
+	{
+		icon: 'shield',
+		title: 'Instituciones',
+		description:
+			'Hoteles, hospitales y edificios con mantenimiento coordinado.',
+	},
+] satisfies Array<{ icon: IconName; title: string; description: string }>;
+
+const metrics = [
+	{
+		value: '25%',
+		label: 'meta de reducción en hogares adheridos durante el primer año',
+	},
+	{ value: 'QR', label: 'trazabilidad del cartucho desde uso hasta entrega' },
+	{
+		value: 'mock',
+		label:
+			'métricas estimadas para comunicar el concepto, no resultados reales',
+	},
+];
+
+function renderIcon(name: IconName) {
+	return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${iconPaths[name]}" /></svg>`;
+}
+---
+
+	<BaseLayout
+	title="FiberLoop | Captura de microfibras en origen"
+	description="Landing promocional estática de FiberLoop, un prototipo para capturar microfibras textiles antes de que lleguen al ambiente."
+	bodyClass="bg-fiber-surface text-slate-950"
+>
+	<header class="sticky top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
+		<nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8" aria-label="Navegación principal">
+			<a href="/" class="flex items-center gap-3 rounded-full focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4">
+				<img src="/fiberloop-logo.png" alt="FiberLoop" class="h-auto w-40 sm:w-48" />
+			</a>
+			<div class="hidden items-center gap-7 text-sm font-bold text-slate-600 md:flex">
+				<a href="#problema" class="hover:text-fiber-blue-700">Problema</a>
+				<a href="#funciona" class="hover:text-fiber-blue-700">Cómo funciona</a>
+				<a href="#impacto" class="hover:text-fiber-blue-700">Impacto</a>
+			</div>
+			<a
+				href="/mobile"
+				class="rounded-full bg-fiber-blue-600 px-4 py-2 text-sm font-black text-white shadow-lg shadow-fiber-blue-600/20 transition hover:-translate-y-0.5 hover:bg-fiber-blue-700 focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+			>
+				Ver app mock
+			</a>
+		</nav>
+	</header>
+
+	<main class="web-page overflow-hidden">
+		<section class="relative mx-auto grid min-h-[calc(100dvh-4.8rem)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
+			<div class="absolute inset-x-0 top-0 -z-10 h-[46rem] bg-[radial-gradient(circle_at_18%_16%,rgba(87,200,255,0.24),transparent_28rem),radial-gradient(circle_at_82%_26%,rgba(61,220,151,0.2),transparent_24rem)]"></div>
+			<div>
+				<p class="mb-5 inline-flex rounded-full border border-fiber-blue-200 bg-white/80 px-4 py-2 text-xs font-black uppercase tracking-[0.26em] text-fiber-blue-700 shadow-sm">
+					Prototipo climate-tech
+				</p>
+				<h1 class="max-w-4xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl xl:text-[5.6rem]">
+					Captura microfibras antes de que desaparezcan de la vista.
+				</h1>
+				<p class="mt-7 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+					FiberLoop es un concepto de cartucho filtrante con sensores, app y recolección municipal para reducir la fuga de fibras textiles desde el origen.
+				</p>
+				<div class="mt-9 flex flex-col gap-3 sm:flex-row">
+					<a href="#funciona" class="inline-flex justify-center rounded-full bg-fiber-blue-600 px-6 py-3 font-black text-white shadow-xl shadow-fiber-blue-600/20 transition hover:-translate-y-0.5 hover:bg-fiber-blue-700 focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+						Ver cómo funciona
+					</a>
+					<a href="/presentacion" class="inline-flex justify-center rounded-full border border-fiber-blue-200 bg-white px-6 py-3 font-black text-fiber-blue-700 transition hover:-translate-y-0.5 hover:border-fiber-blue-400 focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+						Abrir presentación
+					</a>
+				</div>
+			</div>
+
+			<div class="relative grid gap-4">
+				<figure class="hero-photo-card">
+					<img
+						src="/laundry-room-washer.jpg"
+						alt="Lavadero doméstico con lavarropas y secadora, como referencia del punto donde se instalaría FiberLoop."
+						width="1400"
+						height="934"
+						decoding="async"
+					/>
+					<figcaption class="sr-only">
+						Lavadero doméstico usado para contextualizar dónde podría conectarse el cartucho FiberLoop.
+					</figcaption>
+					<div class="hero-flow-card" aria-hidden="true">
+						<span class="hero-flow-label">Flujo propuesto</span>
+						<span class="hero-flow-step">
+							<span class="hero-flow-dot">1</span>
+							<span>
+								<b>Lavarropas</b>
+								<small>salida de agua o aire</small>
+							</span>
+						</span>
+						<i class="hero-flow-arrow"></i>
+						<span class="hero-flow-step is-main">
+							<span class="hero-flow-dot">2</span>
+							<span>
+								<b>Cartucho filtrante</b>
+								<small>captura fibras y mide saturación</small>
+							</span>
+						</span>
+						<i class="hero-flow-arrow"></i>
+						<span class="hero-flow-step">
+							<span class="hero-flow-dot">3</span>
+							<span>
+								<b>App + QR</b>
+								<small>alertas, recambio y entrega</small>
+							</span>
+						</span>
+					</div>
+				</figure>
+				<div class="hero-status-card">
+					<div class="flex items-center justify-between gap-4">
+						<div>
+							<p class="text-xs font-black uppercase tracking-[0.24em] text-fiber-blue-600">Estado del filtro</p>
+							<p class="mt-1 text-2xl font-black tracking-tight text-slate-950">68% saturación</p>
+						</div>
+						<span class="rounded-full bg-fiber-mint/20 px-3 py-1 text-sm font-black text-emerald-700">flujo OK</span>
+					</div>
+					<div class="mt-4 h-3 overflow-hidden rounded-full bg-fiber-blue-100">
+						<div class="h-full w-[68%] rounded-full bg-gradient-to-r from-fiber-blue-500 to-fiber-mint"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="problema" class="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:py-24">
+			<div>
+				<p class="section-kicker">Problema</p>
+				<h2 class="section-title">La contaminación textil empieza en una rutina doméstica.</h2>
+				<p class="mt-5 text-lg leading-8 text-slate-600">
+					Las microfibras no se ven como una botella o una bolsa. Salen en ciclos cotidianos, se mezclan con el flujo de agua o aire y se vuelven difíciles de recuperar.
+				</p>
+			</div>
+			<div class="problem-card-grid">
+				{problemCards.map((card, index) => (
+					<article class:list={["glass-card problem-card group", index === 0 && "is-featured"]}>
+						<span class="web-icon" set:html={renderIcon(card.icon)} />
+						<h3>{card.title}</h3>
+						<p>{card.description}</p>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="mx-auto max-w-7xl px-5 py-10 sm:px-8">
+			<div class="grid overflow-hidden rounded-[2rem] border border-white/70 bg-fiber-blue-700 text-white shadow-2xl shadow-fiber-blue-900/20 lg:grid-cols-[0.95fr_1.05fr]">
+				<figure class="relative min-h-80 overflow-hidden">
+					<img src="/presentation/microplastics-beach.jpg" alt="Microplásticos visibles sobre arena costera." class="h-full w-full object-cover opacity-75" loading="lazy" />
+					<div class="absolute inset-0 bg-gradient-to-r from-fiber-blue-900/58 to-transparent"></div>
+					<figcaption class="absolute bottom-4 left-4 rounded-full bg-white/15 px-3 py-1 text-xs font-bold backdrop-blur">Foto: Anastasiia Nelen / Unsplash</figcaption>
+				</figure>
+				<div class="grid content-center gap-6 p-7 sm:p-10 lg:p-14">
+					<p class="section-kicker text-fiber-cyan">Insight</p>
+					<h2 class="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl">La mejor captura ocurre antes de la dispersión.</h2>
+					<p class="text-lg leading-8 text-slate-300">
+						FiberLoop propone intervenir cerca del lavarropas o una salida compatible de secado, cuando la fibra todavía está concentrada y puede registrarse.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section id="funciona" class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mb-10 max-w-3xl">
+				<p class="section-kicker">Cómo funciona</p>
+				<h2 class="section-title">Un sistema simple: capturar, medir y cerrar el ciclo.</h2>
+			</div>
+			<div class="grid gap-4 md:grid-cols-4">
+				{steps.map((step, index) => (
+					<article class="step-card">
+						<span class="step-number">{String(index + 1).padStart(2, '0')}</span>
+						<span class="web-icon" set:html={renderIcon(step.icon)} />
+						<h3>{step.title}</h3>
+						<p>{step.description}</p>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_0.9fr] lg:py-24">
+			<div class="rounded-[2rem] border border-fiber-blue-100 bg-white p-6 shadow-xl shadow-fiber-blue-900/5 sm:p-10">
+				<p class="section-kicker">Ecosistema</p>
+				<h2 class="section-title">Del cartucho al punto de recolección.</h2>
+				<div class="mt-8 grid gap-4 sm:grid-cols-2">
+					<article class="mini-panel">
+						<span class="web-icon" set:html={renderIcon('phone')} />
+						<h3>App visible</h3>
+						<p>Estado del filtro, historial, alertas y gramos estimados capturados.</p>
+					</article>
+					<article class="mini-panel">
+						<span class="web-icon" set:html={renderIcon('gift')} />
+						<h3>Recompensas</h3>
+						<p>Incentivos municipales para sostener el hábito de entregar cartuchos.</p>
+					</article>
+				</div>
+			</div>
+			<figure class="relative min-h-96 overflow-hidden rounded-[2rem] border border-white bg-white shadow-xl shadow-slate-950/10">
+				<img src="/presentation/recycling-bins.jpg" alt="Contenedores de reciclaje como referencia de puntos de recolección." class="h-full w-full object-cover" loading="lazy" />
+				<div class="absolute inset-x-4 bottom-4 rounded-3xl bg-white/85 p-4 backdrop-blur-xl">
+					<p class="text-sm font-black uppercase tracking-[0.2em] text-fiber-blue-700">Recolección</p>
+					<p class="mt-1 text-lg font-black text-slate-950">Puntos verdes, escuelas o comercios adheridos.</p>
+				</div>
+			</figure>
+		</section>
+
+		<section class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mb-10 max-w-3xl">
+				<p class="section-kicker">Casos de uso</p>
+				<h2 class="section-title">Puede crecer por volumen y contexto.</h2>
+			</div>
+			<div class="grid gap-4 md:grid-cols-4">
+				{useCases.map((item) => (
+					<article class="use-card">
+						<span class="web-icon" set:html={renderIcon(item.icon)} />
+						<h3>{item.title}</h3>
+						<p>{item.description}</p>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section id="impacto" class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+			<div class="impact-shell">
+				<div>
+					<p class="section-kicker text-fiber-mint">Impacto medible</p>
+					<h2 class="text-balance text-4xl font-black leading-tight tracking-tight text-white sm:text-6xl">Dashboard de prueba, no promesa absoluta.</h2>
+					<p class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+						Las métricas son mock para la demo. Sirven para mostrar cómo un municipio o institución podría evaluar cartuchos, zonas y reducción estimada.
+					</p>
+				</div>
+				<div class="grid gap-4 sm:grid-cols-3">
+					{metrics.map((metric) => (
+						<article class="metric-card">
+							<strong>{metric.value}</strong>
+							<span>{metric.label}</span>
+						</article>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+			<div class="rounded-[2.3rem] bg-white p-7 shadow-2xl shadow-fiber-blue-900/10 sm:p-12 lg:p-16">
+				<div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center">
+					<div>
+						<p class="section-kicker">Siguiente paso</p>
+						<h2 class="section-title">Explorá el mock móvil o volvé a la presentación.</h2>
+						<p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+							El producto todavía es conceptual. La demo muestra cómo se comunicarían estado del filtro, QR, recompensas y métricas agregadas.
+						</p>
+					</div>
+					<div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
+						<a href="/mobile" class="cta-primary">Abrir app mock</a>
+						<a href="/presentacion" class="cta-secondary">Ver presentación</a>
+						<a href="https://github.com/lukacerr/fiberloop/blob/main/Document.pdf" target="_blank" rel="noreferrer" class="cta-secondary">Ver documento ↗</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="border-t border-fiber-blue-100 bg-white px-5 py-8 sm:px-8">
+		<div class="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+			<p class="font-bold text-slate-700">FiberLoop · Mock estático para presentación universitaria</p>
+			<p>Sin backend, sin datos reales de usuarios, sin claims de despliegue.</p>
+		</div>
+	</footer>
+
+	<style>
+		.web-page {
+			background:
+				linear-gradient(90deg, rgb(22 143 242 / 4%) 1px, transparent 1px),
+				linear-gradient(180deg, #f5fbff 0%, #ffffff 38%, #f5fbff 100%);
+			background-size: 4rem 4rem, auto;
+		}
+
+		.section-kicker {
+			font-size: 0.78rem;
+			font-weight: 950;
+			letter-spacing: 0.26em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.section-title {
+			margin-top: 0.75rem;
+			max-width: 12ch;
+			font-size: clamp(2.4rem, 6vw, 5.6rem);
+			font-weight: 950;
+			line-height: 0.96;
+			letter-spacing: -0.065em;
+			color: #0f172a;
+		}
+
+		.hero-photo-card {
+			position: relative;
+			min-height: min(74vw, 43rem);
+			isolation: isolate;
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 2.5rem;
+			box-shadow: 0 2rem 5rem rgb(8 114 216 / 14%);
+			overflow: hidden;
+		}
+
+		.hero-photo-card::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			background:
+				linear-gradient(90deg, rgb(8 114 216 / 16%), transparent 46%),
+				linear-gradient(180deg, transparent 36%, rgb(8 114 216 / 32%));
+			pointer-events: none;
+		}
+
+		.hero-photo-card img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+			filter: saturate(0.92) contrast(1.04);
+		}
+
+		.hero-flow-card {
+			position: absolute;
+			right: 1.15rem;
+			bottom: 1.15rem;
+			z-index: 3;
+			display: flex;
+			width: min(22rem, calc(100% - 2.3rem));
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.36rem;
+			border: 1px solid rgb(255 255 255 / 48%);
+			border-radius: 1.7rem;
+			background: linear-gradient(135deg, rgb(255 255 255 / 94%), rgb(239 248 255 / 88%));
+			padding: 0.75rem;
+			box-shadow: 0 1.2rem 3rem rgb(8 114 216 / 20%);
+			backdrop-filter: blur(16px);
+		}
+
+		.hero-flow-label {
+			padding: 0 0.15rem 0.12rem;
+			font-size: 0.68rem;
+			font-weight: 950;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.hero-flow-step {
+			display: flex;
+			gap: 0.6rem;
+			align-items: center;
+			min-width: 0;
+			border: 1px solid rgb(188 227 255 / 74%);
+			border-radius: 1rem;
+			background: rgb(255 255 255 / 80%);
+			padding: 0.54rem 0.65rem;
+		}
+
+		.hero-flow-step.is-main {
+			border-color: rgb(61 220 151 / 56%);
+			background: linear-gradient(135deg, rgb(255 255 255 / 88%), rgb(226 252 238 / 82%));
+			box-shadow: inset 0 0 0 1px rgb(255 255 255 / 60%);
+		}
+
+		.hero-flow-dot {
+			flex: 0 0 auto;
+			display: grid;
+			width: 1.65rem;
+			aspect-ratio: 1;
+			place-items: center;
+			border-radius: 999px;
+			background: #0872d8;
+			font-size: 0.74rem;
+			font-weight: 950;
+			color: #fff;
+		}
+
+		.hero-flow-step > span:last-child {
+			min-width: 0;
+		}
+
+		.hero-flow-step b {
+			display: block;
+			font-size: 0.9rem;
+			font-weight: 950;
+			line-height: 1.1;
+			color: #084c8f;
+		}
+
+		.hero-flow-step small {
+			display: block;
+			margin-top: 0.08rem;
+			font-size: 0.7rem;
+			font-weight: 800;
+			line-height: 1.25;
+			color: #667085;
+		}
+
+		.hero-flow-arrow {
+			position: relative;
+			display: block;
+			width: 0.2rem;
+			height: 0.78rem;
+			margin-left: 1.45rem;
+			border-radius: 999px;
+			background: linear-gradient(180deg, #168ff2, #3ddc97);
+			box-shadow: 0 0 1rem rgb(61 220 151 / 28%);
+		}
+
+		.hero-flow-arrow::after {
+			content: '';
+			position: absolute;
+			left: 50%;
+			bottom: -0.12rem;
+			width: 0.55rem;
+			aspect-ratio: 1;
+			border-right: 0.2rem solid #3ddc97;
+			border-bottom: 0.2rem solid #3ddc97;
+			transform: translateX(-50%) rotate(45deg);
+		}
+
+		.hero-status-card {
+			position: relative;
+			z-index: 4;
+			width: min(25rem, 100%);
+			margin-top: -0.65rem;
+			border: 1px solid rgb(188 227 255 / 86%);
+			border-radius: 1.75rem;
+			background: rgb(255 255 255 / 94%);
+			padding: 1.1rem;
+			box-shadow: 0 1.4rem 3rem rgb(8 114 216 / 14%);
+			backdrop-filter: blur(18px);
+		}
+
+		.problem-card-grid {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1rem;
+		}
+
+		.problem-card {
+			min-height: 16rem;
+		}
+
+		.problem-card.is-featured {
+			grid-row: span 2;
+			display: flex;
+			min-height: 100%;
+			flex-direction: column;
+			justify-content: space-between;
+			background:
+				radial-gradient(circle at 82% 14%, rgb(87 200 255 / 22%), transparent 10rem),
+				rgb(255 255 255 / 84%);
+			padding: 1.8rem;
+		}
+
+		.problem-card.is-featured h3 {
+			font-size: clamp(1.7rem, 3vw, 2.35rem);
+			line-height: 1.02;
+		}
+
+		.problem-card.is-featured p {
+			font-size: 1.05rem;
+		}
+
+		.glass-card,
+		.step-card,
+		.use-card,
+		.mini-panel {
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1.5rem;
+			background: rgb(255 255 255 / 78%);
+			padding: 1.4rem;
+			box-shadow: 0 1rem 2.8rem rgb(15 23 42 / 7%);
+			backdrop-filter: blur(12px);
+			transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+		}
+
+		.glass-card:hover,
+		.step-card:hover,
+		.use-card:hover {
+			transform: translateY(-0.35rem);
+			border-color: #8fd1ff;
+			box-shadow: 0 1.3rem 3.2rem rgb(8 114 216 / 12%);
+		}
+
+		.glass-card h3,
+		.step-card h3,
+		.use-card h3,
+		.mini-panel h3 {
+			margin-top: 1rem;
+			font-size: 1.25rem;
+			font-weight: 950;
+			letter-spacing: -0.04em;
+			color: #084c8f;
+		}
+
+		.glass-card p,
+		.step-card p,
+		.use-card p,
+		.mini-panel p {
+			margin-top: 0.55rem;
+			font-size: 0.95rem;
+			line-height: 1.65;
+			color: #536171;
+		}
+
+		.web-icon {
+			display: grid;
+			width: 3rem;
+			height: 3rem;
+			place-items: center;
+			border-radius: 1rem;
+			background: #eef8ff;
+			color: #0872d8;
+		}
+
+		.web-icon svg {
+			width: 62%;
+			height: 62%;
+			fill: none;
+			stroke: currentColor;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 1.8;
+		}
+
+		.step-card {
+			position: relative;
+			min-height: 18rem;
+			padding-top: 4.25rem;
+		}
+
+		.step-number {
+			position: absolute;
+			left: 1.4rem;
+			top: 1.2rem;
+			font-size: 0.78rem;
+			font-weight: 950;
+			letter-spacing: 0.2em;
+			color: #94a3b8;
+		}
+
+		.impact-shell {
+			display: grid;
+			gap: 2.5rem;
+			border-radius: 2.3rem;
+			background:
+				radial-gradient(circle at 76% 18%, rgb(61 220 151 / 24%), transparent 22rem),
+				linear-gradient(135deg, #075aae, #0872d8 58%, #084c8f);
+			padding: clamp(1.8rem, 5vw, 4rem);
+			box-shadow: 0 2rem 5rem rgb(8 114 216 / 28%);
+		}
+
+		.metric-card {
+			display: grid;
+			gap: 0.6rem;
+			border: 1px solid rgb(143 209 255 / 22%);
+			border-radius: 1.5rem;
+			background: rgb(255 255 255 / 8%);
+			padding: 1.4rem;
+			backdrop-filter: blur(12px);
+		}
+
+		.metric-card strong {
+			font-size: clamp(2rem, 4vw, 4rem);
+			font-weight: 950;
+			line-height: 1;
+			letter-spacing: -0.06em;
+			color: #68e6b1;
+		}
+
+		.metric-card span {
+			font-size: 0.95rem;
+			font-weight: 700;
+			line-height: 1.5;
+			color: #d9f3ff;
+		}
+
+		.cta-primary,
+		.cta-secondary {
+			display: inline-flex;
+			justify-content: center;
+			border-radius: 999px;
+			padding: 0.9rem 1.25rem;
+			font-weight: 950;
+			text-decoration: none;
+			transition: transform 260ms ease, background-color 260ms ease, border-color 260ms ease;
+		}
+
+		.cta-primary {
+			background: #168ff2;
+			color: #fff;
+		}
+
+		.cta-secondary {
+			border: 1px solid #bce3ff;
+			background: #fff;
+			color: #075aae;
+		}
+
+		.cta-primary:hover,
+		.cta-secondary:hover {
+			transform: translateY(-0.18rem);
+		}
+
+		@media (max-width: 760px) {
+			.section-title {
+				max-width: 15ch;
+				line-height: 1;
+			}
+
+			.hero-photo-card {
+				min-height: 36rem;
+			}
+
+			.hero-flow-card {
+				left: 1rem;
+				right: 1rem;
+				bottom: 1rem;
+				width: auto;
+			}
+
+			.hero-status-card {
+				width: auto;
+				margin: -0.4rem 0 0;
+			}
+
+			.problem-card-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.problem-card,
+			.problem-card.is-featured {
+				min-height: auto;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			::before,
+			::after {
+				animation: none !important;
+				scroll-behavior: auto !important;
+				transition: none !important;
+			}
+		}
+	</style>
+</BaseLayout>

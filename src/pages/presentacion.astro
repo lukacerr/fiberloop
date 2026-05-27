@@ -1,0 +1,12 @@
+---
+import PresentationDeck from '@/components/PresentationDeck.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Presentación FiberLoop"
+	description="Deck estático de FiberLoop para explicar la captura de microfibras textiles en origen."
+	bodyClass="presentation-page"
+>
+	<PresentationDeck initialSlide={1} />
+</BaseLayout>

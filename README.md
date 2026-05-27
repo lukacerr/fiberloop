@@ -8,7 +8,7 @@ Este repositorio no busca implementar un producto real ni un backend productivo.
 
 ## Mocks Del Proyecto
 
-- **Presentación:** un deck de aproximadamente 10 minutos usando `@astlide/core`, con poco texto por diapositiva, apoyo visual, notas para exposición y animaciones alineadas con la identidad de FiberLoop.
+- **Presentación:** un deck estático de aproximadamente 10 minutos hecho con Astro y JavaScript local, con poco texto por diapositiva, apoyo visual, notas para exposición y animaciones alineadas con la identidad de FiberLoop.
 - **Web promocional:** una landing page con storytelling ambiental, explicación del producto, insights, métricas mock, casos de uso y llamados a explorar la experiencia móvil.
 - **Mobile mock:** una simulación de la app dentro de un frame mobile, mostrando estado del filtro, cartucho, historial, puntos de recolección, recompensas y flujo QR.
 

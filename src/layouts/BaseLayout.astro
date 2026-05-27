@@ -1,0 +1,31 @@
+---
+import '@/styles/starwind.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	bodyClass?: string;
+}
+
+const {
+	title = 'FiberLoop',
+	description = 'Mocks estáticos para presentar FiberLoop, una solución conceptual para capturar microfibras textiles antes de que lleguen al ambiente.',
+	bodyClass = '',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class={bodyClass}>
+		<slot />
+	</body>
+</html>

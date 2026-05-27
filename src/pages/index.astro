@@ -1,17 +1,80 @@
 ---
+import BaseLayout from '@/layouts/BaseLayout.astro';
 
+const mocks = [
+	{
+		title: 'Presentación',
+		description:
+			'Diapositivas para exponer el problema, la solución y el prototipo.',
+		href: '/presentacion',
+		meta: '01',
+	},
+	{
+		title: 'Web promocional',
+		description: 'Landing del concepto FiberLoop y su impacto ambiental.',
+		href: '/web',
+		meta: '02',
+	},
+	{
+		title: 'App móvil',
+		description:
+			'Mock de estado del filtro, QR, puntos de entrega y recompensas.',
+		href: '/mobile',
+		meta: '03',
+	},
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+	title="FiberLoop | Mocks"
+	description="Portal de mocks para FiberLoop: presentación, web promocional y app móvil."
+	bodyClass="min-h-dvh bg-white text-slate-950"
+>
+	<main class="mx-auto flex min-h-dvh w-full max-w-6xl flex-col justify-center px-5 py-6 sm:px-8">
+		<section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+			<header class="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+				<div class="flex items-center gap-4">
+					<div class="grid h-14 w-20 place-items-center rounded-2xl border border-slate-200 bg-white text-2xl font-black tracking-tighter text-slate-900 shadow-sm">
+						UADE
+					</div>
+					<div>
+						<p class="text-xs font-semibold uppercase tracking-[0.24em] text-fiber-blue-600">Tecnología y Medio Ambiente</p>
+						<p class="mt-1 text-sm text-slate-500">TP Integrador · Grupo 6</p>
+					</div>
+				</div>
+				<img
+					src="/fiberloop-logo.png"
+					alt="FiberLoop"
+					class="h-auto w-44 sm:w-56"
+				/>
+			</header>
+
+			<div class="py-8 sm:py-10">
+				<p class="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-fiber-blue-600">FiberLoop</p>
+				<h1 class="max-w-3xl text-balance text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+					Mocks del proyecto
+				</h1>
+				<p class="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+					Portal estático para acceder a la presentación, la web promocional y el mock móvil.
+				</p>
+			</div>
+
+			<nav aria-label="Mocks del proyecto" class="grid gap-4 md:grid-cols-3">
+				{mocks.map((mock) => (
+					<a
+						href={mock.href}
+						class="group rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left transition duration-200 hover:-translate-y-0.5 hover:border-fiber-blue-400 hover:bg-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+					>
+						<span class="mb-5 inline-flex rounded-full bg-fiber-blue-100 px-3 py-1 text-xs font-bold text-fiber-blue-700">{mock.meta}</span>
+						<h2 class="text-xl font-black tracking-tight text-slate-950">{mock.title}</h2>
+						<p class="mt-2 min-h-12 text-sm leading-6 text-slate-600">{mock.description}</p>
+						<span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-fiber-blue-600">
+							Abrir mock
+							<span aria-hidden="true" class="transition group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">-&gt;</span>
+						</span>
+					</a>
+				))}
+			</nav>
+		</section>
+	</main>
+</BaseLayout>
