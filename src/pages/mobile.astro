@@ -1,17 +1,1505 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+
+type IconName =
+	| 'home'
+	| 'filter'
+	| 'history'
+	| 'map'
+	| 'gift'
+	| 'qr'
+	| 'sensor'
+	| 'drop'
+	| 'check';
+
+const iconPaths: Record<IconName, string> = {
+	home: 'M4 11l8-7l8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z',
+	filter: 'M4 5h16l-6 7v5l-4 2v-7L4 5z M8 5V3h8v2',
+	history: 'M12 8v5l3 2 M5.6 7.1A8 8 0 1 1 4 12 M4 5v4h4',
+	map: 'M9 18l-6 3V6l6-3l6 3l6-3v15l-6 3l-6-3z M9 3v15 M15 6v15 M17 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
+	gift: 'M4 11h16v9H4z M4 11V8h16v3 M12 8v12 M9 8a2.5 2.5 0 1 1 3-3c0 1.7 0 3-3 3z M15 8c-3 0-3-1.3-3-3a2.5 2.5 0 1 1 3 3z',
+	qr: 'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 14h2v4h-2z M14 18h4v2h-4z',
+	sensor:
+		'M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M6.35 6.35a8 8 0 0 0 0 11.3 M17.65 6.35a8 8 0 0 1 0 11.3',
+	drop: 'M12 3C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-11z M9 15a3 3 0 0 0 3 3',
+	check: 'M5 12l4 4L19 6',
+};
+
+const stats = [
+	{ value: '42,8 g', label: 'microfibras estimadas', accent: 'blue' },
+	{ value: '126', label: 'lavados registrados', accent: 'mint' },
+	{ value: '9 dias', label: 'hasta revision', accent: 'reward' },
+];
+
+const programStats = [
+	{ value: '14', label: 'cartuchos entregados' },
+	{ value: '38', label: 'usuarios activos mock' },
+	{ value: '3 zonas', label: 'con datos agregados' },
+];
+
+const cartridgeEvents = [
+	{ label: 'Instalado', value: '12 May', state: 'done' },
+	{ label: 'Lectura de flujo normal', value: '13 May', state: 'done' },
+	{ label: 'Saturacion 68%', value: 'hoy', state: 'active' },
+	{ label: 'Alerta de recambio programada', value: '9 dias', state: 'next' },
+];
+
+const historyEvents = [
+	{
+		title: 'Lavado ropa deportiva',
+		meta: 'Hoy - 0,42 g estimados',
+		kind: 'Lavado',
+	},
+	{
+		title: 'Lavado prendas sinteticas',
+		meta: 'Ayer - 0,36 g estimados',
+		kind: 'Lavado',
+	},
+	{
+		title: 'Recambio de cartucho',
+		meta: 'Lun - FL-24-A91 listo para entrega',
+		kind: 'Recambio',
+	},
+	{
+		title: 'Entrega en Punto Verde',
+		meta: '12 May - +180 eco-puntos',
+		kind: 'Entrega',
+	},
+];
+
+const collectionPoints = [
+	{
+		id: 'belgrano',
+		name: 'Punto Verde Belgrano',
+		distance: '650 m',
+		hours: 'Abierto hasta 18:00',
+		action: 'Entrega con QR habilitada',
+		x: '62%',
+		y: '32%',
+	},
+	{
+		id: 'escuela',
+		name: 'Escuela Tecnica 12',
+		distance: '1,1 km',
+		hours: 'Recepcion de 9 a 15',
+		action: 'Campana de recoleccion semanal',
+		x: '33%',
+		y: '58%',
+	},
+	{
+		id: 'comercio',
+		name: 'Comercio adherido EcoWash',
+		distance: '1,4 km',
+		hours: 'Entrega en mostrador',
+		action: 'Beneficio municipal disponible',
+		x: '45%',
+		y: '28%',
+	},
+	{
+		id: 'municipio',
+		name: 'Municipio Centro',
+		distance: '1,8 km',
+		hours: 'Turno con QR',
+		action: 'Datos agregados al tablero ambiental',
+		x: '72%',
+		y: '70%',
+	},
+];
+
+const rewards = [
+	{
+		title: 'Descuento municipal',
+		detail: '1000 eco-puntos',
+		status: '260 pts restantes',
+	},
+	{
+		title: 'Sello hogar responsable',
+		detail: '3 entregas registradas',
+		status: '2/3 completadas',
+	},
+	{
+		title: 'Kit de recambio',
+		detail: 'Beneficio de mantenimiento',
+		status: 'Disponible pronto',
+	},
+];
+
+const tabs = [
+	{ id: 'inicio', label: 'Inicio', icon: 'home' },
+	{ id: 'cartucho', label: 'Cartucho', icon: 'filter' },
+	{ id: 'historial', label: 'Historial', icon: 'history' },
+	{ id: 'mapa', label: 'Mapa', icon: 'map' },
+	{ id: 'beneficios', label: 'Beneficios', icon: 'gift' },
+	{ id: 'qr', label: 'QR', icon: 'qr' },
+] satisfies Array<{ id: string; label: string; icon: IconName }>;
+
+const qrCells = [
+	1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+	1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0,
+	1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1,
+	1, 1, 1,
+];
+
+function renderIcon(name: IconName) {
+	return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${iconPaths[name]}" /></svg>`;
+}
 ---
 
-<BaseLayout title="App móvil FiberLoop" bodyClass="min-h-screen bg-fiber-deep text-white">
-	<main class="grid min-h-screen place-items-center px-6 py-16">
-		<section class="w-full max-w-2xl rounded-3xl border border-white/15 bg-white/10 p-8 text-center shadow-xl backdrop-blur md:p-12">
-			<img src="/fiberloop-logo.png" alt="FiberLoop" class="mx-auto mb-8 h-auto w-full max-w-sm" />
-			<p class="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-fiber-cyan">Próximamente</p>
-			<h1 class="text-4xl font-black tracking-tight">Mock de app móvil</h1>
-			<p class="mt-4 text-lg leading-8 text-slate-200">
-				Esta ruta mostrará el estado del filtro, cartucho, historial, puntos de recolección, recompensas y QR.
+<BaseLayout
+	title="FiberLoop | Mock app movil"
+	description="Mock interactivo de la app movil FiberLoop con estado del filtro, cartucho, historial, puntos de recoleccion, beneficios y QR."
+	bodyClass="mobile-demo-page bg-fiber-surface text-slate-950"
+>
+	<main class="mobile-demo-shell">
+		<section class="mobile-context" aria-labelledby="mobile-title">
+			<a href="/" class="back-link">Volver al inicio</a>
+			<img src="/fiberloop-logo.png" alt="FiberLoop" class="context-logo" />
+			<p class="context-kicker">Mock interactivo</p>
+			<h1 id="mobile-title">La experiencia movil del cartucho FiberLoop.</h1>
+			<p>
+				Simula el flujo del PDF: capturar, medir, notificar, registrar entrega por QR, asignar beneficios y generar metricas anonimizadas.
 			</p>
-			<a class="mt-8 inline-flex rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground" href="/">Volver al inicio</a>
+			<div class="context-actions">
+				<a href="/web">Ver web</a>
+				<a href="/presentacion">Presentacion</a>
+			</div>
+		</section>
+
+		<section class="phone-stage" aria-label="Mock de app movil FiberLoop">
+			<div class="phone-frame">
+				<div class="phone-speaker" aria-hidden="true"></div>
+				<div class="app-screen" data-mobile-app>
+					<header class="app-header">
+						<div class="status-bar" aria-hidden="true">
+							<span>9:41</span>
+							<span>5G 88%</span>
+						</div>
+						<div class="app-topline">
+							<div>
+								<p>FiberLoop Home</p>
+								<h2>Hola, Laura</h2>
+							</div>
+							<span class="sync-pill">Sincronizado</span>
+						</div>
+					</header>
+
+					<div class="app-content">
+						<section id="panel-inicio" class="app-panel is-active" role="tabpanel" aria-labelledby="tab-inicio" data-panel="inicio">
+							<div class="hero-status">
+								<div class="hero-copy">
+									<span class="state-pill">Flujo OK</span>
+									<h3>Filtro al 68%</h3>
+									<p>Revisar en 9 dias. La captura estimada sigue dentro del rango esperado.</p>
+								</div>
+								<div class="filter-orb" aria-label="Saturacion del filtro 68%">
+									<div class="orb-water"></div>
+									<span>68%</span>
+									<i></i>
+								</div>
+							</div>
+
+							<div class="quick-grid">
+								{stats.map((stat) => (
+									<article class={`quick-card accent-${stat.accent}`}>
+										<strong>{stat.value}</strong>
+										<span>{stat.label}</span>
+									</article>
+								))}
+							</div>
+
+							<div class="goal-card">
+								<div>
+									<span>Meta ambiental</span>
+									<strong>25%</strong>
+								</div>
+								<p>Objetivo de reduccion en hogares e instituciones adheridas durante el primer ano de prueba.</p>
+								<div class="goal-progress" aria-label="Seguimiento estimado 18 por ciento">
+									<i></i>
+								</div>
+								<small>18% estimado en seguimiento</small>
+							</div>
+
+							<div class="notice-card">
+								<span set:html={renderIcon('sensor')} />
+								<div>
+									<strong>Recambio sugerido en 9 dias</strong>
+									<p>Sensor activo. Ultima lectura hace 12 minutos.</p>
+								</div>
+							</div>
+
+							<div class="action-row">
+								<button type="button" class="app-button primary" data-open-tab="qr">Registrar cartucho</button>
+								<button type="button" class="app-button secondary" data-open-tab="mapa">Punto de entrega</button>
+							</div>
+						</section>
+
+						<section id="panel-cartucho" class="app-panel" role="tabpanel" aria-labelledby="tab-cartucho" data-panel="cartucho" hidden>
+							<div class="screen-title">
+								<p>Cartucho activo</p>
+								<h3>FL-24-A91</h3>
+							</div>
+							<div class="cartridge-card">
+								<div class="cartridge-visual" aria-hidden="true">
+									<div class="cartridge-fill"></div>
+									<span></span>
+								</div>
+								<div>
+									<span class="state-pill warning">Revisar pronto</span>
+									<h4>68% saturacion</h4>
+									<p>Instalado el 12 May. Compatible con salida de agua del lavarropas.</p>
+								</div>
+							</div>
+							<div class="capture-mode-card">
+								<strong>Modo de captura</strong>
+								<div>
+									<span class="is-active">Agua de lavado</span>
+									<span>Aire de secado compatible</span>
+								</div>
+							</div>
+							<div class="sensor-grid">
+								<article><span set:html={renderIcon('drop')} /><strong>Flujo</strong><p>Normal</p></article>
+								<article><span set:html={renderIcon('sensor')} /><strong>Obstruccion</strong><p>Baja</p></article>
+								<article><span set:html={renderIcon('check')} /><strong>Conexion</strong><p>Bluetooth</p></article>
+							</div>
+							<ol class="timeline">
+								{cartridgeEvents.map((event) => (
+									<li class={event.state}>
+										<span></span>
+										<div><strong>{event.label}</strong><small>{event.value}</small></div>
+									</li>
+								))}
+							</ol>
+						</section>
+
+						<section id="panel-historial" class="app-panel" role="tabpanel" aria-labelledby="tab-historial" data-panel="historial" hidden>
+							<div class="screen-title">
+								<p>Actividad</p>
+								<h3>Historial de captura</h3>
+							</div>
+							<div class="month-card">
+								<div><span>Mayo</span><strong>8,4 g</strong><small>estimados recuperados</small></div>
+								<div class="bars" aria-label="Actividad mensual mock">
+									<span style="height: 34%"></span><span style="height: 58%"></span><span style="height: 42%"></span><span style="height: 76%"></span><span style="height: 62%"></span><span style="height: 88%"></span>
+								</div>
+							</div>
+							<div class="program-grid">
+								{programStats.map((stat) => (
+									<article>
+										<strong>{stat.value}</strong>
+										<span>{stat.label}</span>
+									</article>
+								))}
+							</div>
+							<div class="event-list">
+								{historyEvents.map((event) => (
+									<article>
+										<span>{event.kind}</span>
+										<div><strong>{event.title}</strong><p>{event.meta}</p></div>
+									</article>
+								))}
+							</div>
+						</section>
+
+						<section id="panel-mapa" class="app-panel" role="tabpanel" aria-labelledby="tab-mapa" data-panel="mapa" hidden>
+							<div class="screen-title">
+								<p>Recoleccion</p>
+								<h3>Puntos cercanos</h3>
+							</div>
+							<div class="mock-map" aria-label="Mapa simulado de puntos de recoleccion">
+								{collectionPoints.map((point, index) => (
+									<button
+										type="button"
+										class:list={["map-pin", index === 0 && "is-active"]}
+										style={`left:${point.x};top:${point.y}`}
+										data-point={point.id}
+										aria-label={`Seleccionar ${point.name}`}
+									>
+										<span></span>
+									</button>
+								))}
+							</div>
+							<div class="point-list">
+								{collectionPoints.map((point, index) => (
+									<article class:list={["point-card", index === 0 && "is-active"]} data-point-card={point.id}>
+										<div><strong>{point.name}</strong><p>{point.hours}</p><small>{point.action}</small></div>
+										<span>{point.distance}</span>
+									</article>
+								))}
+							</div>
+						</section>
+
+						<section id="panel-beneficios" class="app-panel" role="tabpanel" aria-labelledby="tab-beneficios" data-panel="beneficios" hidden>
+							<div class="screen-title">
+								<p>Beneficios</p>
+								<h3>740 eco-puntos</h3>
+							</div>
+							<div class="reward-progress">
+								<div><strong>Meta mensual</strong><span>740 / 1000</span></div>
+								<div><i></i></div>
+								<p>Un cartucho entregado suma puntos y ayuda a sostener el programa local.</p>
+							</div>
+							<div class="circular-card">
+								<span set:html={renderIcon('filter')} />
+								<div>
+									<strong>Circularidad</strong>
+									<p>Fibras recuperadas derivadas a tratamiento como posible insumo para nuevos materiales.</p>
+								</div>
+							</div>
+							<div class="reward-list">
+								{rewards.map((reward) => (
+									<article>
+										<span set:html={renderIcon('gift')} />
+										<div><strong>{reward.title}</strong><p>{reward.detail}</p></div>
+										<small>{reward.status}</small>
+									</article>
+								))}
+							</div>
+						</section>
+
+						<section id="panel-qr" class="app-panel" role="tabpanel" aria-labelledby="tab-qr" data-panel="qr" hidden>
+							<div class="screen-title">
+								<p>Registro QR</p>
+								<h3 data-scan-title>Escanear cartucho</h3>
+							</div>
+							<div class="scan-card" data-scan-card>
+								<div class="qr-box" aria-label="Codigo QR simulado del cartucho FL-24-A91">
+									{qrCells.map((cell) => <span class:list={[cell === 1 && 'filled']}></span>)}
+									<i></i>
+								</div>
+								<strong data-scan-state>Cartucho FL-24-A91 listo para registrar</strong>
+								<p>Escaneo simulado para mostrar el flujo de entrega y trazabilidad.</p>
+								<ul data-scan-results>
+									<li>Entrega pendiente</li>
+									<li>Eco-puntos por asignar</li>
+									<li>Datos aun no enviados</li>
+								</ul>
+							</div>
+							<div class="privacy-note">
+								<strong>Privacidad</strong>
+								<p>Datos anonimizados y agregados para estadisticas ambientales municipales.</p>
+							</div>
+							<button type="button" class="app-button primary full" data-scan-button>Simular escaneo</button>
+						</section>
+					</div>
+
+					<nav class="app-tabbar" role="tablist" aria-label="Navegacion de la app FiberLoop">
+						{tabs.map((tab, index) => (
+							<button
+								type="button"
+								id={`tab-${tab.id}`}
+								class:list={["tab-button", index === 0 && "is-active"]}
+								role="tab"
+								aria-selected={index === 0 ? 'true' : 'false'}
+								aria-controls={`panel-${tab.id}`}
+								data-tab={tab.id}
+							>
+								<span set:html={renderIcon(tab.icon)} />
+								<small>{tab.label}</small>
+							</button>
+						))}
+					</nav>
+				</div>
+			</div>
 		</section>
 	</main>
+
+	<script>
+		const app = document.querySelector('[data-mobile-app]');
+
+		if (app) {
+			const tabs = Array.from(app.querySelectorAll('[data-tab]'));
+			const panels = Array.from(app.querySelectorAll('[data-panel]'));
+			const openers = Array.from(app.querySelectorAll('[data-open-tab]'));
+
+			function activateTab(tabId) {
+				for (const tab of tabs) {
+					const isActive = tab.dataset.tab === tabId;
+					tab.classList.toggle('is-active', isActive);
+					tab.setAttribute('aria-selected', String(isActive));
+				}
+
+				for (const panel of panels) {
+					const isActive = panel.dataset.panel === tabId;
+					panel.hidden = !isActive;
+					panel.classList.toggle('is-active', isActive);
+				}
+			}
+
+			for (const tab of tabs) {
+				tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+			}
+
+			for (const opener of openers) {
+				opener.addEventListener('click', () => activateTab(opener.dataset.openTab));
+			}
+
+			const pins = Array.from(app.querySelectorAll('[data-point]'));
+			const pointCards = Array.from(app.querySelectorAll('[data-point-card]'));
+
+			for (const pin of pins) {
+				pin.addEventListener('click', () => {
+					const selected = pin.dataset.point;
+					for (const item of pins) item.classList.toggle('is-active', item.dataset.point === selected);
+					for (const card of pointCards) card.classList.toggle('is-active', card.dataset.pointCard === selected);
+				});
+			}
+
+			const scanButton = app.querySelector('[data-scan-button]');
+			const scanCard = app.querySelector('[data-scan-card]');
+			const scanState = app.querySelector('[data-scan-state]');
+			const scanTitle = app.querySelector('[data-scan-title]');
+			const scanResults = app.querySelector('[data-scan-results]');
+
+			scanButton?.addEventListener('click', () => {
+				scanCard?.classList.add('is-registered');
+				if (scanState) scanState.textContent = 'Entrega registrada';
+				if (scanTitle) scanTitle.textContent = 'Registro completo';
+				if (scanResults) {
+					scanResults.innerHTML = '<li>+180 eco-puntos asignados</li><li>Entrega asociada a Punto Verde Belgrano</li><li>Datos agregados enviados al tablero municipal</li>';
+				}
+				scanButton.textContent = 'Escaneo completado';
+				scanButton.setAttribute('disabled', 'true');
+			});
+		}
+	</script>
+
+	<style>
+		.mobile-demo-page {
+			min-height: 100dvh;
+			overflow-x: hidden;
+		}
+
+		.mobile-demo-shell {
+			position: relative;
+			display: grid;
+			min-height: 100dvh;
+			grid-template-columns: minmax(0, 0.88fr) minmax(360px, 440px);
+			gap: clamp(2rem, 6vw, 5rem);
+			align-items: center;
+			max-width: 1180px;
+			margin: 0 auto;
+			padding: clamp(1.2rem, 4vw, 3rem);
+			background:
+				radial-gradient(circle at 14% 18%, rgb(87 200 255 / 28%), transparent 22rem),
+				radial-gradient(circle at 86% 74%, rgb(61 220 151 / 18%), transparent 24rem);
+		}
+
+		.mobile-context {
+			display: grid;
+			gap: 1rem;
+		}
+
+		.context-logo {
+			width: min(18rem, 80vw);
+			height: auto;
+		}
+
+		.back-link,
+		.context-actions a {
+			display: inline-flex;
+			width: fit-content;
+			border-radius: 999px;
+			font-weight: 950;
+			text-decoration: none;
+			transition: transform 220ms ease, background-color 220ms ease, border-color 220ms ease;
+		}
+
+		.back-link {
+			border: 1px solid rgb(188 227 255 / 85%);
+			background: rgb(255 255 255 / 74%);
+			padding: 0.7rem 1rem;
+			color: #075aae;
+		}
+
+		.context-kicker {
+			margin-top: 1rem;
+			font-size: 0.8rem;
+			font-weight: 950;
+			letter-spacing: 0.24em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.mobile-context h1 {
+			max-width: 10ch;
+			font-size: clamp(3rem, 8vw, 6.1rem);
+			font-weight: 950;
+			line-height: 0.92;
+			letter-spacing: -0.07em;
+			color: #084c8f;
+		}
+
+		.mobile-context p:not(.context-kicker) {
+			max-width: 35rem;
+			font-size: 1.1rem;
+			line-height: 1.8;
+			color: #536171;
+		}
+
+		.context-actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.8rem;
+			margin-top: 0.8rem;
+		}
+
+		.context-actions a {
+			border: 1px solid #bce3ff;
+			background: #fff;
+			padding: 0.9rem 1.1rem;
+			color: #075aae;
+			box-shadow: 0 1rem 2.4rem rgb(8 114 216 / 10%);
+		}
+
+		.back-link:hover,
+		.context-actions a:hover {
+			transform: translateY(-0.18rem);
+			border-color: #55b5ff;
+		}
+
+		.phone-stage {
+			display: grid;
+			place-items: center;
+		}
+
+		.phone-frame {
+			position: relative;
+			width: min(100%, 410px);
+			aspect-ratio: 390 / 844;
+			border: 0.72rem solid #075aae;
+			border-radius: 3.1rem;
+			background: #075aae;
+			box-shadow: 0 2.4rem 6rem rgb(8 114 216 / 24%), inset 0 0 0 1px rgb(255 255 255 / 24%);
+			padding: 0.42rem;
+		}
+
+		.phone-speaker {
+			position: absolute;
+			top: 0.75rem;
+			left: 50%;
+			z-index: 8;
+			width: 6.2rem;
+			height: 1.45rem;
+			border-radius: 999px;
+			background: #075aae;
+			transform: translateX(-50%);
+			box-shadow: inset 0 -1px 0 rgb(255 255 255 / 18%);
+		}
+
+		.app-screen {
+			display: grid;
+			height: 100%;
+			grid-template-rows: auto minmax(0, 1fr) auto;
+			overflow: hidden;
+			border-radius: 2.45rem;
+			background:
+				radial-gradient(circle at 82% 4%, rgb(87 200 255 / 30%), transparent 12rem),
+				linear-gradient(180deg, #eef8ff 0%, #f8fcff 44%, #eaf7ff 100%);
+			color: #0f172a;
+		}
+
+		.app-header {
+			padding: 1.05rem 1.15rem 0.8rem;
+			background: linear-gradient(180deg, rgb(255 255 255 / 74%), transparent);
+		}
+
+		.status-bar,
+		.app-topline,
+		.action-row,
+		.reward-progress > div:first-child {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.8rem;
+		}
+
+		.status-bar {
+			padding: 0.2rem 0.45rem 0.85rem;
+			font-size: 0.72rem;
+			font-weight: 900;
+			color: #075aae;
+		}
+
+		.app-topline p,
+		.screen-title p {
+			font-size: 0.7rem;
+			font-weight: 950;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.app-topline h2,
+		.screen-title h3 {
+			margin-top: 0.1rem;
+			font-size: 1.75rem;
+			font-weight: 950;
+			letter-spacing: -0.05em;
+			color: #084c8f;
+		}
+
+		.sync-pill,
+		.state-pill {
+			display: inline-flex;
+			align-items: center;
+			width: fit-content;
+			border-radius: 999px;
+			background: rgb(61 220 151 / 18%);
+			padding: 0.45rem 0.65rem;
+			font-size: 0.72rem;
+			font-weight: 950;
+			color: #047857;
+		}
+
+		.state-pill.warning {
+			background: rgb(246 196 83 / 24%);
+			color: #92400e;
+		}
+
+		.app-content {
+			overflow: hidden auto;
+			padding: 0 1rem 1rem;
+			scrollbar-width: none;
+		}
+
+		.app-content::-webkit-scrollbar {
+			display: none;
+		}
+
+		.app-panel {
+			display: grid;
+			gap: 0.9rem;
+			padding-bottom: 0.2rem;
+		}
+
+		.app-panel[hidden] {
+			display: none;
+		}
+
+		.app-panel.is-active {
+			animation: panel-in 260ms ease both;
+		}
+
+		.hero-status,
+		.cartridge-card,
+		.month-card,
+		.scan-card,
+		.reward-progress,
+		.goal-card,
+		.capture-mode-card,
+		.circular-card,
+		.privacy-note,
+		.notice-card {
+			border: 1px solid rgb(188 227 255 / 74%);
+			border-radius: 1.45rem;
+			background: rgb(255 255 255 / 82%);
+			box-shadow: 0 1rem 2.2rem rgb(8 114 216 / 10%);
+			backdrop-filter: blur(14px);
+		}
+
+		.hero-status {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			gap: 0.8rem;
+			align-items: center;
+			padding: 1rem;
+			background:
+				radial-gradient(circle at 88% 22%, rgb(61 220 151 / 20%), transparent 8rem),
+				linear-gradient(135deg, #fff, #eef8ff);
+		}
+
+		.hero-copy h3 {
+			margin-top: 0.7rem;
+			font-size: 2.15rem;
+			font-weight: 950;
+			line-height: 0.95;
+			letter-spacing: -0.07em;
+			color: #084c8f;
+		}
+
+		.hero-copy p,
+		.notice-card p,
+		.cartridge-card p,
+		.goal-card p,
+		.circular-card p,
+		.privacy-note p,
+		.reward-progress p,
+		.event-list p,
+		.point-card p,
+		.reward-list p {
+			margin-top: 0.35rem;
+			font-size: 0.78rem;
+			font-weight: 700;
+			line-height: 1.45;
+			color: #64748b;
+		}
+
+		.filter-orb {
+			position: relative;
+			display: grid;
+			width: 6.9rem;
+			aspect-ratio: 1;
+			place-items: center;
+			overflow: hidden;
+			border: 0.55rem solid #d9efff;
+			border-radius: 999px;
+			background: #fff;
+			box-shadow: inset 0 0 0 1px rgb(8 114 216 / 10%);
+		}
+
+		.orb-water {
+			position: absolute;
+			inset: auto -20% 0;
+			height: 68%;
+			background: linear-gradient(180deg, #57c8ff, #168ff2);
+			animation: water-shift 4s ease-in-out infinite;
+		}
+
+		.filter-orb span {
+			position: relative;
+			z-index: 1;
+			font-size: 1.55rem;
+			font-weight: 950;
+			color: #fff;
+			text-shadow: 0 2px 10px rgb(8 76 143 / 34%);
+		}
+
+		.filter-orb i {
+			position: absolute;
+			inset: 22% 16% auto auto;
+			width: 0.55rem;
+			aspect-ratio: 1;
+			border-radius: 999px;
+			background: #3ddc97;
+			box-shadow: 0 0 0 0.45rem rgb(61 220 151 / 18%);
+		}
+
+		.quick-grid,
+		.sensor-grid {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.55rem;
+		}
+
+		.quick-card,
+		.sensor-grid article {
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1rem;
+			background: rgb(255 255 255 / 78%);
+			padding: 0.75rem;
+		}
+
+		.quick-card strong {
+			display: block;
+			font-size: 1.05rem;
+			font-weight: 950;
+			letter-spacing: -0.04em;
+			color: #075aae;
+		}
+
+		.quick-card span,
+		.program-grid span,
+		.sensor-grid p,
+		.timeline small,
+		.goal-card small,
+		.point-card small,
+		.reward-list small {
+			display: block;
+			margin-top: 0.2rem;
+			font-size: 0.67rem;
+			font-weight: 800;
+			line-height: 1.25;
+			color: #64748b;
+		}
+
+		.accent-mint strong {
+			color: #047857;
+		}
+
+		.accent-reward strong {
+			color: #b45309;
+		}
+
+		.notice-card {
+			display: flex;
+			gap: 0.75rem;
+			align-items: center;
+			padding: 0.8rem;
+		}
+
+		.notice-card > span,
+		.sensor-grid span,
+		.circular-card > span,
+		.reward-list > article > span {
+			display: grid;
+			width: 2.35rem;
+			height: 2.35rem;
+			place-items: center;
+			border-radius: 0.85rem;
+			background: #eef8ff;
+			color: #0872d8;
+		}
+
+		.notice-card svg,
+		.sensor-grid svg,
+		.circular-card svg,
+		.reward-list svg,
+		.tab-button svg {
+			width: 60%;
+			height: 60%;
+			fill: none;
+			stroke: currentColor;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 1.9;
+		}
+
+		.notice-card strong,
+		.sensor-grid strong,
+		.goal-card strong,
+		.capture-mode-card strong,
+		.program-grid strong,
+		.circular-card strong,
+		.privacy-note strong,
+		.event-list strong,
+		.point-card strong,
+		.reward-list strong,
+		.scan-card strong {
+			font-size: 0.9rem;
+			font-weight: 950;
+			color: #084c8f;
+		}
+
+		.app-button {
+			border: 0;
+			border-radius: 999px;
+			padding: 0.78rem 0.9rem;
+			font-size: 0.82rem;
+			font-weight: 950;
+			transition: transform 220ms ease, opacity 220ms ease;
+		}
+
+		.app-button.primary {
+			background: #0872d8;
+			color: #fff;
+			box-shadow: 0 1rem 1.8rem rgb(8 114 216 / 22%);
+		}
+
+		.app-button.secondary {
+			border: 1px solid #bce3ff;
+			background: #fff;
+			color: #075aae;
+		}
+
+		.app-button.full {
+			width: 100%;
+		}
+
+		.app-button:hover:not(:disabled) {
+			transform: translateY(-0.14rem);
+		}
+
+		.app-button:disabled {
+			opacity: 0.72;
+		}
+
+		.goal-card {
+			display: grid;
+			gap: 0.65rem;
+			padding: 0.9rem;
+			background:
+				radial-gradient(circle at 90% 10%, rgb(87 200 255 / 22%), transparent 7rem),
+				rgb(255 255 255 / 82%);
+		}
+
+		.goal-card > div:first-child {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 0.8rem;
+		}
+
+		.goal-card > div:first-child span {
+			font-size: 0.68rem;
+			font-weight: 950;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.goal-card strong {
+			font-size: 2rem;
+			line-height: 1;
+		}
+
+		.goal-progress {
+			height: 0.75rem;
+			overflow: hidden;
+			border-radius: 999px;
+			background: #d9efff;
+		}
+
+		.goal-progress i {
+			display: block;
+			width: 72%;
+			height: 100%;
+			border-radius: inherit;
+			background: linear-gradient(90deg, #168ff2, #3ddc97);
+		}
+
+		.cartridge-card {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			gap: 0.9rem;
+			align-items: center;
+			padding: 1rem;
+		}
+
+		.cartridge-visual {
+			position: relative;
+			width: 5rem;
+			height: 8.8rem;
+			overflow: hidden;
+			border: 0.35rem solid #bce3ff;
+			border-radius: 1.1rem;
+			background: #fff;
+		}
+
+		.cartridge-fill {
+			position: absolute;
+			inset: auto 0 0;
+			height: 68%;
+			background: linear-gradient(180deg, #57c8ff, #3ddc97);
+		}
+
+		.cartridge-visual span {
+			position: absolute;
+			inset: 0.75rem 1.4rem;
+			border-radius: 999px;
+			background: rgb(8 114 216 / 10%);
+		}
+
+		.cartridge-card h4 {
+			margin-top: 0.6rem;
+			font-size: 1.55rem;
+			font-weight: 950;
+			letter-spacing: -0.05em;
+			color: #084c8f;
+		}
+
+		.capture-mode-card {
+			display: grid;
+			gap: 0.65rem;
+			padding: 0.85rem;
+		}
+
+		.capture-mode-card > div {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.45rem;
+		}
+
+		.capture-mode-card span {
+			display: inline-flex;
+			border-radius: 999px;
+			background: #eef8ff;
+			padding: 0.45rem 0.58rem;
+			font-size: 0.7rem;
+			font-weight: 950;
+			color: #075aae;
+		}
+
+		.capture-mode-card span.is-active {
+			background: rgb(61 220 151 / 18%);
+			color: #047857;
+		}
+
+		.sensor-grid article {
+			display: grid;
+			gap: 0.35rem;
+		}
+
+		.timeline {
+			display: grid;
+			gap: 0.7rem;
+			margin: 0;
+			padding: 0.2rem 0 0;
+			list-style: none;
+		}
+
+		.timeline li {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			gap: 0.65rem;
+			align-items: center;
+		}
+
+		.timeline li > span {
+			width: 0.9rem;
+			aspect-ratio: 1;
+			border: 3px solid #bce3ff;
+			border-radius: 999px;
+			background: #fff;
+		}
+
+		.timeline li.done > span,
+		.timeline li.active > span {
+			border-color: #3ddc97;
+			background: #3ddc97;
+		}
+
+		.timeline li.active > span {
+			box-shadow: 0 0 0 0.45rem rgb(61 220 151 / 14%);
+		}
+
+		.month-card {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 9rem;
+			gap: 1rem;
+			align-items: end;
+			padding: 1rem;
+		}
+
+		.month-card span,
+		.month-card small {
+			display: block;
+			font-size: 0.72rem;
+			font-weight: 900;
+			color: #64748b;
+		}
+
+		.month-card strong {
+			display: block;
+			font-size: 2.2rem;
+			font-weight: 950;
+			letter-spacing: -0.06em;
+			color: #0872d8;
+		}
+
+		.program-grid {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.55rem;
+		}
+
+		.program-grid article {
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1rem;
+			background: rgb(255 255 255 / 78%);
+			padding: 0.72rem;
+		}
+
+		.bars {
+			display: flex;
+			height: 5rem;
+			align-items: end;
+			gap: 0.35rem;
+		}
+
+		.bars span {
+			flex: 1;
+			border-radius: 999px;
+			background: linear-gradient(180deg, #3ddc97, #168ff2);
+		}
+
+		.event-list,
+		.point-list,
+		.reward-list {
+			display: grid;
+			gap: 0.65rem;
+		}
+
+		.event-list article,
+		.point-card,
+		.reward-list article {
+			display: flex;
+			gap: 0.7rem;
+			align-items: center;
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1.1rem;
+			background: rgb(255 255 255 / 78%);
+			padding: 0.75rem;
+		}
+
+		.event-list article > span {
+			flex: 0 0 auto;
+			border-radius: 999px;
+			background: #eef8ff;
+			padding: 0.35rem 0.48rem;
+			font-size: 0.62rem;
+			font-weight: 950;
+			color: #0872d8;
+		}
+
+		.mock-map {
+			position: relative;
+			height: 13.5rem;
+			overflow: hidden;
+			border: 1px solid #bce3ff;
+			border-radius: 1.4rem;
+			background:
+				linear-gradient(90deg, rgb(8 114 216 / 10%) 1px, transparent 1px),
+				linear-gradient(180deg, rgb(8 114 216 / 10%) 1px, transparent 1px),
+				radial-gradient(circle at 64% 38%, rgb(61 220 151 / 30%), transparent 5rem),
+				#eef8ff;
+			background-size: 2.1rem 2.1rem, 2.1rem 2.1rem, auto, auto;
+		}
+
+		.mock-map::before,
+		.mock-map::after {
+			content: '';
+			position: absolute;
+			border-radius: 999px;
+			background: rgb(8 114 216 / 20%);
+			transform: rotate(-18deg);
+		}
+
+		.mock-map::before {
+			left: -10%;
+			top: 48%;
+			width: 120%;
+			height: 1.1rem;
+		}
+
+		.mock-map::after {
+			left: 18%;
+			top: 0;
+			width: 1rem;
+			height: 120%;
+		}
+
+		.map-pin {
+			position: absolute;
+			z-index: 1;
+			display: grid;
+			width: 2rem;
+			aspect-ratio: 1;
+			place-items: center;
+			border: 0;
+			border-radius: 999px 999px 999px 0;
+			background: #0872d8;
+			box-shadow: 0 0.8rem 1.8rem rgb(8 114 216 / 24%);
+			transform: translate(-50%, -50%) rotate(-45deg);
+		}
+
+		.map-pin span {
+			width: 0.7rem;
+			aspect-ratio: 1;
+			border-radius: 999px;
+			background: #fff;
+		}
+
+		.map-pin.is-active {
+			background: #3ddc97;
+			box-shadow: 0 0 0 0.5rem rgb(61 220 151 / 18%), 0 0.8rem 1.8rem rgb(8 114 216 / 18%);
+		}
+
+		.point-card {
+			justify-content: space-between;
+		}
+
+		.point-card.is-active {
+			border-color: #3ddc97;
+			background: #f0fff8;
+		}
+
+		.point-card > span {
+			font-size: 0.75rem;
+			font-weight: 950;
+			color: #0872d8;
+		}
+
+		.point-card small {
+			color: #047857;
+		}
+
+		.reward-progress {
+			padding: 1rem;
+		}
+
+		.reward-progress strong,
+		.reward-progress span {
+			font-weight: 950;
+			color: #084c8f;
+		}
+
+		.reward-progress > div:nth-child(2) {
+			height: 0.85rem;
+			overflow: hidden;
+			border-radius: 999px;
+			background: #d9efff;
+			margin-top: 0.8rem;
+		}
+
+		.reward-progress i {
+			display: block;
+			width: 74%;
+			height: 100%;
+			border-radius: inherit;
+			background: linear-gradient(90deg, #f6c453, #3ddc97);
+		}
+
+		.reward-list article {
+			align-items: flex-start;
+		}
+
+		.circular-card,
+		.privacy-note {
+			display: flex;
+			gap: 0.75rem;
+			align-items: flex-start;
+			padding: 0.85rem;
+		}
+
+		.privacy-note {
+			background: #eef8ff;
+		}
+
+		.reward-list article > div {
+			min-width: 0;
+			flex: 1;
+		}
+
+		.reward-list small {
+			max-width: 5.5rem;
+			text-align: right;
+			color: #b45309;
+		}
+
+		.scan-card {
+			display: grid;
+			justify-items: center;
+			gap: 0.75rem;
+			padding: 1.3rem 1rem;
+			text-align: center;
+		}
+
+		.qr-box {
+			position: relative;
+			display: grid;
+			width: 12.5rem;
+			aspect-ratio: 1;
+			grid-template-columns: repeat(9, 1fr);
+			gap: 0.22rem;
+			overflow: hidden;
+			border: 0.85rem solid #fff;
+			border-radius: 1.2rem;
+			background: #fff;
+			box-shadow: 0 1rem 2.2rem rgb(8 114 216 / 14%);
+		}
+
+		.qr-box span {
+			border-radius: 0.18rem;
+			background: #eaf7ff;
+		}
+
+		.qr-box span.filled {
+			background: #075aae;
+		}
+
+		.qr-box i {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			height: 0.18rem;
+			background: #3ddc97;
+			box-shadow: 0 0 1.2rem #3ddc97;
+			animation: scan-line 2.4s ease-in-out infinite;
+		}
+
+		.scan-card.is-registered {
+			border-color: #3ddc97;
+			background: #f0fff8;
+		}
+
+		.scan-card p {
+			max-width: 15rem;
+			font-size: 0.78rem;
+			font-weight: 700;
+			line-height: 1.5;
+			color: #64748b;
+		}
+
+		.scan-card ul {
+			display: grid;
+			gap: 0.35rem;
+			width: 100%;
+			margin: 0.1rem 0 0;
+			padding: 0;
+			list-style: none;
+			text-align: left;
+		}
+
+		.scan-card li {
+			border-radius: 0.8rem;
+			background: #eef8ff;
+			padding: 0.45rem 0.6rem;
+			font-size: 0.7rem;
+			font-weight: 850;
+			color: #075aae;
+		}
+
+		.scan-card.is-registered li {
+			background: rgb(61 220 151 / 16%);
+			color: #047857;
+		}
+
+		.app-tabbar {
+			display: grid;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			gap: 0.25rem;
+			border-top: 1px solid rgb(188 227 255 / 72%);
+			background: rgb(255 255 255 / 82%);
+			padding: 0.55rem 0.55rem 0.75rem;
+			backdrop-filter: blur(18px);
+		}
+
+		.tab-button {
+			display: grid;
+			min-width: 0;
+			gap: 0.2rem;
+			justify-items: center;
+			border: 0;
+			border-radius: 0.9rem;
+			background: transparent;
+			padding: 0.45rem 0.2rem;
+			color: #64748b;
+			transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
+		}
+
+		.tab-button span {
+			display: grid;
+			width: 1.55rem;
+			height: 1.55rem;
+			place-items: center;
+		}
+
+		.tab-button small {
+			font-size: 0.54rem;
+			font-weight: 950;
+			line-height: 1;
+		}
+
+		.tab-button.is-active {
+			background: #eef8ff;
+			color: #0872d8;
+		}
+
+		.tab-button:focus-visible,
+		.app-button:focus-visible,
+		.map-pin:focus-visible,
+		.back-link:focus-visible,
+		.context-actions a:focus-visible {
+			outline: 3px solid #55b5ff;
+			outline-offset: 3px;
+		}
+
+		@keyframes panel-in {
+			from {
+				opacity: 0;
+				transform: translateY(0.35rem);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes water-shift {
+			0%,
+			100% {
+				transform: translateY(0) rotate(0deg);
+			}
+			50% {
+				transform: translateY(-0.25rem) rotate(1deg);
+			}
+		}
+
+		@keyframes scan-line {
+			0%,
+			100% {
+				transform: translateY(0);
+			}
+			50% {
+				transform: translateY(10rem);
+			}
+		}
+
+		@media (max-width: 920px) {
+			.mobile-demo-shell {
+				grid-template-columns: 1fr;
+			}
+
+			.mobile-context {
+				text-align: center;
+				justify-items: center;
+			}
+
+			.mobile-context h1 {
+				max-width: 13ch;
+			}
+		}
+
+		@media (max-width: 520px) {
+			.mobile-demo-page {
+				background: #eef8ff;
+			}
+
+			.mobile-demo-shell {
+				display: block;
+				min-height: 100dvh;
+				padding: 0;
+			}
+
+			.mobile-context {
+				display: none;
+			}
+
+			.phone-stage,
+			.phone-frame {
+				width: 100%;
+				min-height: 100dvh;
+			}
+
+			.phone-frame {
+				aspect-ratio: auto;
+				border: 0;
+				border-radius: 0;
+				box-shadow: none;
+				padding: 0;
+			}
+
+			.phone-speaker {
+				display: none;
+			}
+
+			.app-screen {
+				min-height: 100dvh;
+				border-radius: 0;
+			}
+
+			.app-content {
+				padding-inline: 0.85rem;
+			}
+
+			.hero-status {
+				grid-template-columns: minmax(0, 1fr);
+			}
+
+			.filter-orb {
+				justify-self: center;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			::before,
+			::after {
+				animation: none !important;
+				scroll-behavior: auto !important;
+				transition: none !important;
+			}
+		}
+	</style>
 </BaseLayout>
