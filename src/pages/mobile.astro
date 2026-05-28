@@ -1,136 +1,136 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 type IconName =
-	| 'home'
-	| 'filter'
-	| 'history'
-	| 'map'
-	| 'gift'
-	| 'qr'
-	| 'sensor'
-	| 'drop'
-	| 'check';
+	| "home"
+	| "filter"
+	| "history"
+	| "map"
+	| "gift"
+	| "qr"
+	| "sensor"
+	| "drop"
+	| "check";
 
 const iconPaths: Record<IconName, string> = {
-	home: 'M4 11l8-7l8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z',
-	filter: 'M4 5h16l-6 7v5l-4 2v-7L4 5z M8 5V3h8v2',
-	history: 'M12 8v5l3 2 M5.6 7.1A8 8 0 1 1 4 12 M4 5v4h4',
-	map: 'M9 18l-6 3V6l6-3l6 3l6-3v15l-6 3l-6-3z M9 3v15 M15 6v15 M17 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
-	gift: 'M4 11h16v9H4z M4 11V8h16v3 M12 8v12 M9 8a2.5 2.5 0 1 1 3-3c0 1.7 0 3-3 3z M15 8c-3 0-3-1.3-3-3a2.5 2.5 0 1 1 3 3z',
-	qr: 'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 14h2v4h-2z M14 18h4v2h-4z',
+	home: "M4 11l8-7l8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z",
+	filter: "M4 5h16l-6 7v5l-4 2v-7L4 5z M8 5V3h8v2",
+	history: "M12 8v5l3 2 M5.6 7.1A8 8 0 1 1 4 12 M4 5v4h4",
+	map: "M9 18l-6 3V6l6-3l6 3l6-3v15l-6 3l-6-3z M9 3v15 M15 6v15 M17 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
+	gift: "M4 11h16v9H4z M4 11V8h16v3 M12 8v12 M9 8a2.5 2.5 0 1 1 3-3c0 1.7 0 3-3 3z M15 8c-3 0-3-1.3-3-3a2.5 2.5 0 1 1 3 3z",
+	qr: "M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 14h2v4h-2z M14 18h4v2h-4z",
 	sensor:
-		'M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M6.35 6.35a8 8 0 0 0 0 11.3 M17.65 6.35a8 8 0 0 1 0 11.3',
-	drop: 'M12 3C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-11z M9 15a3 3 0 0 0 3 3',
-	check: 'M5 12l4 4L19 6',
+		"M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M6.35 6.35a8 8 0 0 0 0 11.3 M17.65 6.35a8 8 0 0 1 0 11.3",
+	drop: "M12 3C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-11z M9 15a3 3 0 0 0 3 3",
+	check: "M5 12l4 4L19 6",
 };
 
 const stats = [
-	{ value: '42,8 g', label: 'microfibras estimadas', accent: 'blue' },
-	{ value: '126', label: 'lavados registrados', accent: 'mint' },
-	{ value: '9 dias', label: 'hasta revision', accent: 'reward' },
+	{ value: "42,8 g", label: "microfibras estimadas", accent: "blue" },
+	{ value: "126", label: "lavados registrados", accent: "mint" },
+	{ value: "9 dias", label: "hasta revision", accent: "reward" },
 ];
 
 const programStats = [
-	{ value: '14', label: 'cartuchos entregados' },
-	{ value: '38', label: 'usuarios activos mock' },
-	{ value: '3 zonas', label: 'con datos agregados' },
+	{ value: "14", label: "cartuchos entregados" },
+	{ value: "38", label: "usuarios activos mock" },
+	{ value: "3 zonas", label: "con datos agregados" },
 ];
 
 const cartridgeEvents = [
-	{ label: 'Instalado', value: '12 May', state: 'done' },
-	{ label: 'Lectura de flujo normal', value: '13 May', state: 'done' },
-	{ label: 'Saturacion 68%', value: 'hoy', state: 'active' },
-	{ label: 'Alerta de recambio programada', value: '9 dias', state: 'next' },
+	{ label: "Instalado", value: "12 May", state: "done" },
+	{ label: "Lectura de flujo normal", value: "13 May", state: "done" },
+	{ label: "Saturacion 68%", value: "hoy", state: "active" },
+	{ label: "Alerta de recambio programada", value: "9 dias", state: "next" },
 ];
 
 const historyEvents = [
 	{
-		title: 'Lavado ropa deportiva',
-		meta: 'Hoy - 0,42 g estimados',
-		kind: 'Lavado',
+		title: "Lavado ropa deportiva",
+		meta: "Hoy - 0,42 g estimados",
+		kind: "Lavado",
 	},
 	{
-		title: 'Lavado prendas sinteticas',
-		meta: 'Ayer - 0,36 g estimados',
-		kind: 'Lavado',
+		title: "Lavado prendas sinteticas",
+		meta: "Ayer - 0,36 g estimados",
+		kind: "Lavado",
 	},
 	{
-		title: 'Recambio de cartucho',
-		meta: 'Lun - FL-24-A91 listo para entrega',
-		kind: 'Recambio',
+		title: "Recambio de cartucho",
+		meta: "Lun - FL-24-A91 listo para entrega",
+		kind: "Recambio",
 	},
 	{
-		title: 'Entrega en Punto Verde',
-		meta: '12 May - +180 eco-puntos',
-		kind: 'Entrega',
+		title: "Entrega en Punto Verde",
+		meta: "12 May - +180 eco-puntos",
+		kind: "Entrega",
 	},
 ];
 
 const collectionPoints = [
 	{
-		id: 'belgrano',
-		name: 'Punto Verde Belgrano',
-		distance: '650 m',
-		hours: 'Abierto hasta 18:00',
-		action: 'Entrega con QR habilitada',
-		x: '62%',
-		y: '32%',
+		id: "belgrano",
+		name: "Punto Verde Belgrano",
+		distance: "650 m",
+		hours: "Abierto hasta 18:00",
+		action: "Entrega con QR habilitada",
+		x: "62%",
+		y: "32%",
 	},
 	{
-		id: 'escuela',
-		name: 'Escuela Tecnica 12',
-		distance: '1,1 km',
-		hours: 'Recepcion de 9 a 15',
-		action: 'Campana de recoleccion semanal',
-		x: '33%',
-		y: '58%',
+		id: "escuela",
+		name: "Escuela Tecnica 12",
+		distance: "1,1 km",
+		hours: "Recepcion de 9 a 15",
+		action: "Campana de recoleccion semanal",
+		x: "33%",
+		y: "58%",
 	},
 	{
-		id: 'comercio',
-		name: 'Comercio adherido EcoWash',
-		distance: '1,4 km',
-		hours: 'Entrega en mostrador',
-		action: 'Beneficio municipal disponible',
-		x: '45%',
-		y: '28%',
+		id: "comercio",
+		name: "Comercio adherido EcoWash",
+		distance: "1,4 km",
+		hours: "Entrega en mostrador",
+		action: "Beneficio municipal disponible",
+		x: "45%",
+		y: "28%",
 	},
 	{
-		id: 'municipio',
-		name: 'Municipio Centro',
-		distance: '1,8 km',
-		hours: 'Turno con QR',
-		action: 'Datos agregados al tablero ambiental',
-		x: '72%',
-		y: '70%',
+		id: "municipio",
+		name: "Municipio Centro",
+		distance: "1,8 km",
+		hours: "Turno con QR",
+		action: "Datos agregados al tablero ambiental",
+		x: "72%",
+		y: "70%",
 	},
 ];
 
 const rewards = [
 	{
-		title: 'Descuento municipal',
-		detail: '1000 eco-puntos',
-		status: '260 pts restantes',
+		title: "Descuento municipal",
+		detail: "1000 eco-puntos",
+		status: "260 pts restantes",
 	},
 	{
-		title: 'Sello hogar responsable',
-		detail: '3 entregas registradas',
-		status: '2/3 completadas',
+		title: "Sello hogar responsable",
+		detail: "3 entregas registradas",
+		status: "2/3 completadas",
 	},
 	{
-		title: 'Kit de recambio',
-		detail: 'Beneficio de mantenimiento',
-		status: 'Disponible pronto',
+		title: "Kit de recambio",
+		detail: "Beneficio de mantenimiento",
+		status: "Disponible pronto",
 	},
 ];
 
 const tabs = [
-	{ id: 'inicio', label: 'Inicio', icon: 'home' },
-	{ id: 'cartucho', label: 'Cartucho', icon: 'filter' },
-	{ id: 'historial', label: 'Historial', icon: 'history' },
-	{ id: 'mapa', label: 'Mapa', icon: 'map' },
-	{ id: 'beneficios', label: 'Beneficios', icon: 'gift' },
-	{ id: 'qr', label: 'QR', icon: 'qr' },
+	{ id: "inicio", label: "Inicio", icon: "home" },
+	{ id: "cartucho", label: "Cartucho", icon: "filter" },
+	{ id: "historial", label: "Historial", icon: "history" },
+	{ id: "mapa", label: "Mapa", icon: "map" },
+	{ id: "beneficios", label: "Beneficios", icon: "gift" },
+	{ id: "qr", label: "QR", icon: "qr" },
 ] satisfies Array<{ id: string; label: string; icon: IconName }>;
 
 const qrCells = [
@@ -157,11 +157,12 @@ function renderIcon(name: IconName) {
 			<p class="context-kicker">Mock interactivo</p>
 			<h1 id="mobile-title">La experiencia movil del cartucho FiberLoop.</h1>
 			<p>
-				Simula el flujo del PDF: capturar, medir, notificar, registrar entrega por QR, asignar beneficios y generar metricas anonimizadas.
+				Simula el flujo del PDF: capturar, medir, notificar, registrar entrega
+				por QR, asignar beneficios y generar metricas anonimizadas.
 			</p>
 			<div class="context-actions">
 				<a href="/web">Ver web</a>
-				<a href="/presentacion">Presentacion</a>
+				<a href="/presentacion">Presentación</a>
 			</div>
 		</section>
 
@@ -184,12 +185,21 @@ function renderIcon(name: IconName) {
 					</header>
 
 					<div class="app-content">
-						<section id="panel-inicio" class="app-panel is-active" role="tabpanel" aria-labelledby="tab-inicio" data-panel="inicio">
+						<section
+							id="panel-inicio"
+							class="app-panel is-active"
+							role="tabpanel"
+							aria-labelledby="tab-inicio"
+							data-panel="inicio"
+						>
 							<div class="hero-status">
 								<div class="hero-copy">
 									<span class="state-pill">Flujo OK</span>
 									<h3>Filtro al 68%</h3>
-									<p>Revisar en 9 dias. La captura estimada sigue dentro del rango esperado.</p>
+									<p>
+										Revisar en 9 dias. La captura estimada sigue dentro del
+										rango esperado.
+									</p>
 								</div>
 								<div class="filter-orb" aria-label="Saturacion del filtro 68%">
 									<div class="orb-water"></div>
@@ -199,12 +209,14 @@ function renderIcon(name: IconName) {
 							</div>
 
 							<div class="quick-grid">
-								{stats.map((stat) => (
-									<article class={`quick-card accent-${stat.accent}`}>
-										<strong>{stat.value}</strong>
-										<span>{stat.label}</span>
-									</article>
-								))}
+								{
+									stats.map((stat) => (
+										<article class={`quick-card accent-${stat.accent}`}>
+											<strong>{stat.value}</strong>
+											<span>{stat.label}</span>
+										</article>
+									))
+								}
 							</div>
 
 							<div class="goal-card">
@@ -212,15 +224,21 @@ function renderIcon(name: IconName) {
 									<span>Meta ambiental</span>
 									<strong>25%</strong>
 								</div>
-								<p>Objetivo de reduccion en hogares e instituciones adheridas durante el primer ano de prueba.</p>
-								<div class="goal-progress" aria-label="Seguimiento estimado 18 por ciento">
+								<p>
+									Objetivo de reduccion en hogares e instituciones adheridas
+									durante el primer ano de prueba.
+								</p>
+								<div
+									class="goal-progress"
+									aria-label="Seguimiento estimado 18 por ciento"
+								>
 									<i></i>
 								</div>
 								<small>18% estimado en seguimiento</small>
 							</div>
 
 							<div class="notice-card">
-								<span set:html={renderIcon('sensor')} />
+								<span set:html={renderIcon("sensor")} />
 								<div>
 									<strong>Recambio sugerido en 9 dias</strong>
 									<p>Sensor activo. Ultima lectura hace 12 minutos.</p>
@@ -228,12 +246,27 @@ function renderIcon(name: IconName) {
 							</div>
 
 							<div class="action-row">
-								<button type="button" class="app-button primary" data-open-tab="qr">Registrar cartucho</button>
-								<button type="button" class="app-button secondary" data-open-tab="mapa">Punto de entrega</button>
+								<button
+									type="button"
+									class="app-button primary"
+									data-open-tab="qr">Registrar cartucho</button
+								>
+								<button
+									type="button"
+									class="app-button secondary"
+									data-open-tab="mapa">Punto de entrega</button
+								>
 							</div>
 						</section>
 
-						<section id="panel-cartucho" class="app-panel" role="tabpanel" aria-labelledby="tab-cartucho" data-panel="cartucho" hidden>
+						<section
+							id="panel-cartucho"
+							class="app-panel"
+							role="tabpanel"
+							aria-labelledby="tab-cartucho"
+							data-panel="cartucho"
+							hidden
+						>
 							<div class="screen-title">
 								<p>Cartucho activo</p>
 								<h3>FL-24-A91</h3>
@@ -246,7 +279,10 @@ function renderIcon(name: IconName) {
 								<div>
 									<span class="state-pill warning">Revisar pronto</span>
 									<h4>68% saturacion</h4>
-									<p>Instalado el 12 May. Compatible con salida de agua del lavarropas.</p>
+									<p>
+										Instalado el 12 May. Compatible con salida de agua del
+										lavarropas.
+									</p>
 								</div>
 							</div>
 							<div class="capture-mode-card">
@@ -257,78 +293,150 @@ function renderIcon(name: IconName) {
 								</div>
 							</div>
 							<div class="sensor-grid">
-								<article><span set:html={renderIcon('drop')} /><strong>Flujo</strong><p>Normal</p></article>
-								<article><span set:html={renderIcon('sensor')} /><strong>Obstruccion</strong><p>Baja</p></article>
-								<article><span set:html={renderIcon('check')} /><strong>Conexion</strong><p>Bluetooth</p></article>
+								<article>
+									<span set:html={renderIcon("drop")} /><strong>Flujo</strong><p
+									>
+										Normal
+									</p>
+								</article>
+								<article>
+									<span set:html={renderIcon("sensor")} /><strong
+										>Obstruccion</strong
+									><p>Baja</p>
+								</article>
+								<article>
+									<span set:html={renderIcon("check")} /><strong
+										>Conexion</strong
+									><p>Bluetooth</p>
+								</article>
 							</div>
 							<ol class="timeline">
-								{cartridgeEvents.map((event) => (
-									<li class={event.state}>
-										<span></span>
-										<div><strong>{event.label}</strong><small>{event.value}</small></div>
-									</li>
-								))}
+								{
+									cartridgeEvents.map((event) => (
+										<li class={event.state}>
+											<span />
+											<div>
+												<>
+													<strong>{event.label}</strong>
+													<small>{event.value}</small>
+												</>
+											</div>
+										</li>
+									))
+								}
 							</ol>
 						</section>
 
-						<section id="panel-historial" class="app-panel" role="tabpanel" aria-labelledby="tab-historial" data-panel="historial" hidden>
+						<section
+							id="panel-historial"
+							class="app-panel"
+							role="tabpanel"
+							aria-labelledby="tab-historial"
+							data-panel="historial"
+							hidden
+						>
 							<div class="screen-title">
 								<p>Actividad</p>
 								<h3>Historial de captura</h3>
 							</div>
 							<div class="month-card">
-								<div><span>Mayo</span><strong>8,4 g</strong><small>estimados recuperados</small></div>
+								<div>
+									<span>Mayo</span><strong>8,4 g</strong><small
+										>estimados recuperados</small>
+								</div>
 								<div class="bars" aria-label="Actividad mensual mock">
-									<span style="height: 34%"></span><span style="height: 58%"></span><span style="height: 42%"></span><span style="height: 76%"></span><span style="height: 62%"></span><span style="height: 88%"></span>
+									<span style="height: 34%"></span><span style="height: 58%"
+									></span><span style="height: 42%"></span><span
+										style="height: 76%"></span><span style="height: 62%"
+									></span><span style="height: 88%"></span>
 								</div>
 							</div>
 							<div class="program-grid">
-								{programStats.map((stat) => (
-									<article>
-										<strong>{stat.value}</strong>
-										<span>{stat.label}</span>
-									</article>
-								))}
+								{
+									programStats.map((stat) => (
+										<article>
+											<strong>{stat.value}</strong>
+											<span>{stat.label}</span>
+										</article>
+									))
+								}
 							</div>
 							<div class="event-list">
-								{historyEvents.map((event) => (
-									<article>
-										<span>{event.kind}</span>
-										<div><strong>{event.title}</strong><p>{event.meta}</p></div>
-									</article>
-								))}
+								{
+									historyEvents.map((event) => (
+										<article>
+											<span>{event.kind}</span>
+											<div>
+												<>
+													<strong>{event.title}</strong>
+													<p>{event.meta}</p>
+												</>
+											</div>
+										</article>
+									))
+								}
 							</div>
 						</section>
 
-						<section id="panel-mapa" class="app-panel" role="tabpanel" aria-labelledby="tab-mapa" data-panel="mapa" hidden>
+						<section
+							id="panel-mapa"
+							class="app-panel"
+							role="tabpanel"
+							aria-labelledby="tab-mapa"
+							data-panel="mapa"
+							hidden
+						>
 							<div class="screen-title">
 								<p>Recoleccion</p>
 								<h3>Puntos cercanos</h3>
 							</div>
-							<div class="mock-map" aria-label="Mapa simulado de puntos de recoleccion">
-								{collectionPoints.map((point, index) => (
-									<button
-										type="button"
-										class:list={["map-pin", index === 0 && "is-active"]}
-										style={`left:${point.x};top:${point.y}`}
-										data-point={point.id}
-										aria-label={`Seleccionar ${point.name}`}
-									>
-										<span></span>
-									</button>
-								))}
+							<div
+								class="mock-map"
+								aria-label="Mapa simulado de puntos de recoleccion"
+							>
+								{
+									collectionPoints.map((point, index) => (
+										<button
+											type="button"
+											class:list={["map-pin", index === 0 && "is-active"]}
+											style={`left:${point.x};top:${point.y}`}
+											data-point={point.id}
+											aria-label={`Seleccionar ${point.name}`}
+										>
+											<span />
+										</button>
+									))
+								}
 							</div>
 							<div class="point-list">
-								{collectionPoints.map((point, index) => (
-									<article class:list={["point-card", index === 0 && "is-active"]} data-point-card={point.id}>
-										<div><strong>{point.name}</strong><p>{point.hours}</p><small>{point.action}</small></div>
-										<span>{point.distance}</span>
-									</article>
-								))}
+								{
+									collectionPoints.map((point, index) => (
+										<article
+											class:list={["point-card", index === 0 && "is-active"]}
+											data-point-card={point.id}
+										>
+											<div>
+												<>
+													<strong>{point.name}</strong>
+													<p>{point.hours}</p>
+													<small>{point.action}</small>
+												</>
+											</div>
+											<span>{point.distance}</span>
+										</article>
+									))
+								}
 							</div>
 						</section>
 
-						<section id="panel-beneficios" class="app-panel" role="tabpanel" aria-labelledby="tab-beneficios" data-panel="beneficios" hidden>
+						<section
+							id="panel-beneficios"
+							class="app-panel"
+							role="tabpanel"
+							aria-labelledby="tab-beneficios"
+							data-panel="beneficios"
+							hidden
+						>
 							<div class="screen-title">
 								<p>Beneficios</p>
 								<h3>740 eco-puntos</h3>
@@ -336,38 +444,70 @@ function renderIcon(name: IconName) {
 							<div class="reward-progress">
 								<div><strong>Meta mensual</strong><span>740 / 1000</span></div>
 								<div><i></i></div>
-								<p>Un cartucho entregado suma puntos y ayuda a sostener el programa local.</p>
+								<p>
+									Un cartucho entregado suma puntos y ayuda a sostener el
+									programa local.
+								</p>
 							</div>
 							<div class="circular-card">
-								<span set:html={renderIcon('filter')} />
+								<span set:html={renderIcon("filter")} />
 								<div>
 									<strong>Circularidad</strong>
-									<p>Fibras recuperadas derivadas a tratamiento como posible insumo para nuevos materiales.</p>
+									<p>
+										Fibras recuperadas derivadas a tratamiento como posible
+										insumo para nuevos materiales.
+									</p>
 								</div>
 							</div>
 							<div class="reward-list">
-								{rewards.map((reward) => (
-									<article>
-										<span set:html={renderIcon('gift')} />
-										<div><strong>{reward.title}</strong><p>{reward.detail}</p></div>
-										<small>{reward.status}</small>
-									</article>
-								))}
+								{
+									rewards.map((reward) => (
+										<article>
+											<span set:html={renderIcon("gift")} />
+											<div>
+												<>
+													<strong>{reward.title}</strong>
+													<p>{reward.detail}</p>
+												</>
+											</div>
+											<small>{reward.status}</small>
+										</article>
+									))
+								}
 							</div>
 						</section>
 
-						<section id="panel-qr" class="app-panel" role="tabpanel" aria-labelledby="tab-qr" data-panel="qr" hidden>
+						<section
+							id="panel-qr"
+							class="app-panel"
+							role="tabpanel"
+							aria-labelledby="tab-qr"
+							data-panel="qr"
+							hidden
+						>
 							<div class="screen-title">
 								<p>Registro QR</p>
 								<h3 data-scan-title>Escanear cartucho</h3>
 							</div>
 							<div class="scan-card" data-scan-card>
-								<div class="qr-box" aria-label="Codigo QR simulado del cartucho FL-24-A91">
-									{qrCells.map((cell) => <span class:list={[cell === 1 && 'filled']}></span>)}
+								<div
+									class="qr-box"
+									aria-label="Codigo QR simulado del cartucho FL-24-A91"
+								>
+									{
+										qrCells.map((cell) => (
+											<span class:list={[cell === 1 && "filled"]} />
+										))
+									}
 									<i></i>
 								</div>
-								<strong data-scan-state>Cartucho FL-24-A91 listo para registrar</strong>
-								<p>Escaneo simulado para mostrar el flujo de entrega y trazabilidad.</p>
+								<strong data-scan-state
+									>Cartucho FL-24-A91 listo para registrar</strong
+								>
+								<p>
+									Escaneo simulado para mostrar el flujo de entrega y
+									trazabilidad.
+								</p>
 								<ul data-scan-results>
 									<li>Entrega pendiente</li>
 									<li>Eco-puntos por asignar</li>
@@ -376,27 +516,40 @@ function renderIcon(name: IconName) {
 							</div>
 							<div class="privacy-note">
 								<strong>Privacidad</strong>
-								<p>Datos anonimizados y agregados para estadisticas ambientales municipales.</p>
+								<p>
+									Datos anonimizados y agregados para estadisticas ambientales
+									municipales.
+								</p>
 							</div>
-							<button type="button" class="app-button primary full" data-scan-button>Simular escaneo</button>
+							<button
+								type="button"
+								class="app-button primary full"
+								data-scan-button>Simular escaneo</button
+							>
 						</section>
 					</div>
 
-					<nav class="app-tabbar" role="tablist" aria-label="Navegacion de la app FiberLoop">
-						{tabs.map((tab, index) => (
-							<button
-								type="button"
-								id={`tab-${tab.id}`}
-								class:list={["tab-button", index === 0 && "is-active"]}
-								role="tab"
-								aria-selected={index === 0 ? 'true' : 'false'}
-								aria-controls={`panel-${tab.id}`}
-								data-tab={tab.id}
-							>
-								<span set:html={renderIcon(tab.icon)} />
-								<small>{tab.label}</small>
-							</button>
-						))}
+					<nav
+						class="app-tabbar"
+						role="tablist"
+						aria-label="Navegacion de la app FiberLoop"
+					>
+						{
+							tabs.map((tab, index) => (
+								<button
+									type="button"
+									id={`tab-${tab.id}`}
+									class:list={["tab-button", index === 0 && "is-active"]}
+									role="tab"
+									aria-selected={index === 0 ? "true" : "false"}
+									aria-controls={`panel-${tab.id}`}
+									data-tab={tab.id}
+								>
+									<span set:html={renderIcon(tab.icon)} />
+									<small>{tab.label}</small>
+								</button>
+							))
+						}
 					</nav>
 				</div>
 			</div>
@@ -404,61 +557,69 @@ function renderIcon(name: IconName) {
 	</main>
 
 	<script>
-		const app = document.querySelector('[data-mobile-app]');
+		const app = document.querySelector("[data-mobile-app]");
 
 		if (app) {
-			const tabs = Array.from(app.querySelectorAll('[data-tab]'));
-			const panels = Array.from(app.querySelectorAll('[data-panel]'));
-			const openers = Array.from(app.querySelectorAll('[data-open-tab]'));
+			const tabs = Array.from(app.querySelectorAll("[data-tab]"));
+			const panels = Array.from(app.querySelectorAll("[data-panel]"));
+			const openers = Array.from(app.querySelectorAll("[data-open-tab]"));
 
 			function activateTab(tabId) {
 				for (const tab of tabs) {
 					const isActive = tab.dataset.tab === tabId;
-					tab.classList.toggle('is-active', isActive);
-					tab.setAttribute('aria-selected', String(isActive));
+					tab.classList.toggle("is-active", isActive);
+					tab.setAttribute("aria-selected", String(isActive));
 				}
 
 				for (const panel of panels) {
 					const isActive = panel.dataset.panel === tabId;
 					panel.hidden = !isActive;
-					panel.classList.toggle('is-active', isActive);
+					panel.classList.toggle("is-active", isActive);
 				}
 			}
 
 			for (const tab of tabs) {
-				tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+				tab.addEventListener("click", () => activateTab(tab.dataset.tab));
 			}
 
 			for (const opener of openers) {
-				opener.addEventListener('click', () => activateTab(opener.dataset.openTab));
+				opener.addEventListener("click", () =>
+					activateTab(opener.dataset.openTab),
+				);
 			}
 
-			const pins = Array.from(app.querySelectorAll('[data-point]'));
-			const pointCards = Array.from(app.querySelectorAll('[data-point-card]'));
+			const pins = Array.from(app.querySelectorAll("[data-point]"));
+			const pointCards = Array.from(app.querySelectorAll("[data-point-card]"));
 
 			for (const pin of pins) {
-				pin.addEventListener('click', () => {
+				pin.addEventListener("click", () => {
 					const selected = pin.dataset.point;
-					for (const item of pins) item.classList.toggle('is-active', item.dataset.point === selected);
-					for (const card of pointCards) card.classList.toggle('is-active', card.dataset.pointCard === selected);
+					for (const item of pins)
+						item.classList.toggle("is-active", item.dataset.point === selected);
+					for (const card of pointCards)
+						card.classList.toggle(
+							"is-active",
+							card.dataset.pointCard === selected,
+						);
 				});
 			}
 
-			const scanButton = app.querySelector('[data-scan-button]');
-			const scanCard = app.querySelector('[data-scan-card]');
-			const scanState = app.querySelector('[data-scan-state]');
-			const scanTitle = app.querySelector('[data-scan-title]');
-			const scanResults = app.querySelector('[data-scan-results]');
+			const scanButton = app.querySelector("[data-scan-button]");
+			const scanCard = app.querySelector("[data-scan-card]");
+			const scanState = app.querySelector("[data-scan-state]");
+			const scanTitle = app.querySelector("[data-scan-title]");
+			const scanResults = app.querySelector("[data-scan-results]");
 
-			scanButton?.addEventListener('click', () => {
-				scanCard?.classList.add('is-registered');
-				if (scanState) scanState.textContent = 'Entrega registrada';
-				if (scanTitle) scanTitle.textContent = 'Registro completo';
+			scanButton?.addEventListener("click", () => {
+				scanCard?.classList.add("is-registered");
+				if (scanState) scanState.textContent = "Entrega registrada";
+				if (scanTitle) scanTitle.textContent = "Registro completo";
 				if (scanResults) {
-					scanResults.innerHTML = '<li>+180 eco-puntos asignados</li><li>Entrega asociada a Punto Verde Belgrano</li><li>Datos agregados enviados al tablero municipal</li>';
+					scanResults.innerHTML =
+						"<li>+180 eco-puntos asignados</li><li>Entrega asociada a Punto Verde Belgrano</li><li>Datos agregados enviados al tablero municipal</li>";
 				}
-				scanButton.textContent = 'Escaneo completado';
-				scanButton.setAttribute('disabled', 'true');
+				scanButton.textContent = "Escaneo completado";
+				scanButton.setAttribute("disabled", "true");
 			});
 		}
 	</script>
@@ -480,8 +641,16 @@ function renderIcon(name: IconName) {
 			margin: 0 auto;
 			padding: clamp(1.2rem, 4vw, 3rem);
 			background:
-				radial-gradient(circle at 14% 18%, rgb(87 200 255 / 28%), transparent 22rem),
-				radial-gradient(circle at 86% 74%, rgb(61 220 151 / 18%), transparent 24rem);
+				radial-gradient(
+					circle at 14% 18%,
+					rgb(87 200 255 / 28%),
+					transparent 22rem
+				),
+				radial-gradient(
+					circle at 86% 74%,
+					rgb(61 220 151 / 18%),
+					transparent 24rem
+				);
 		}
 
 		.mobile-context {
@@ -501,7 +670,10 @@ function renderIcon(name: IconName) {
 			border-radius: 999px;
 			font-weight: 950;
 			text-decoration: none;
-			transition: transform 220ms ease, background-color 220ms ease, border-color 220ms ease;
+			transition:
+				transform 220ms ease,
+				background-color 220ms ease,
+				border-color 220ms ease;
 		}
 
 		.back-link {
@@ -569,7 +741,9 @@ function renderIcon(name: IconName) {
 			border: 0.72rem solid #075aae;
 			border-radius: 3.1rem;
 			background: #075aae;
-			box-shadow: 0 2.4rem 6rem rgb(8 114 216 / 24%), inset 0 0 0 1px rgb(255 255 255 / 24%);
+			box-shadow:
+				0 2.4rem 6rem rgb(8 114 216 / 24%),
+				inset 0 0 0 1px rgb(255 255 255 / 24%);
 			padding: 0.42rem;
 		}
 
@@ -593,7 +767,11 @@ function renderIcon(name: IconName) {
 			overflow: hidden;
 			border-radius: 2.45rem;
 			background:
-				radial-gradient(circle at 82% 4%, rgb(87 200 255 / 30%), transparent 12rem),
+				radial-gradient(
+					circle at 82% 4%,
+					rgb(87 200 255 / 30%),
+					transparent 12rem
+				),
 				linear-gradient(180deg, #eef8ff 0%, #f8fcff 44%, #eaf7ff 100%);
 			color: #0f172a;
 		}
@@ -704,7 +882,11 @@ function renderIcon(name: IconName) {
 			align-items: center;
 			padding: 1rem;
 			background:
-				radial-gradient(circle at 88% 22%, rgb(61 220 151 / 20%), transparent 8rem),
+				radial-gradient(
+					circle at 88% 22%,
+					rgb(61 220 151 / 20%),
+					transparent 8rem
+				),
 				linear-gradient(135deg, #fff, #eef8ff);
 		}
 
@@ -876,7 +1058,9 @@ function renderIcon(name: IconName) {
 			padding: 0.78rem 0.9rem;
 			font-size: 0.82rem;
 			font-weight: 950;
-			transition: transform 220ms ease, opacity 220ms ease;
+			transition:
+				transform 220ms ease,
+				opacity 220ms ease;
 		}
 
 		.app-button.primary {
@@ -908,7 +1092,11 @@ function renderIcon(name: IconName) {
 			gap: 0.65rem;
 			padding: 0.9rem;
 			background:
-				radial-gradient(circle at 90% 10%, rgb(87 200 255 / 22%), transparent 7rem),
+				radial-gradient(
+					circle at 90% 10%,
+					rgb(87 200 255 / 22%),
+					transparent 7rem
+				),
 				rgb(255 255 255 / 82%);
 		}
 
@@ -1140,14 +1328,22 @@ function renderIcon(name: IconName) {
 			background:
 				linear-gradient(90deg, rgb(8 114 216 / 10%) 1px, transparent 1px),
 				linear-gradient(180deg, rgb(8 114 216 / 10%) 1px, transparent 1px),
-				radial-gradient(circle at 64% 38%, rgb(61 220 151 / 30%), transparent 5rem),
+				radial-gradient(
+					circle at 64% 38%,
+					rgb(61 220 151 / 30%),
+					transparent 5rem
+				),
 				#eef8ff;
-			background-size: 2.1rem 2.1rem, 2.1rem 2.1rem, auto, auto;
+			background-size:
+				2.1rem 2.1rem,
+				2.1rem 2.1rem,
+				auto,
+				auto;
 		}
 
 		.mock-map::before,
 		.mock-map::after {
-			content: '';
+			content: "";
 			position: absolute;
 			border-radius: 999px;
 			background: rgb(8 114 216 / 20%);
@@ -1191,7 +1387,9 @@ function renderIcon(name: IconName) {
 
 		.map-pin.is-active {
 			background: #3ddc97;
-			box-shadow: 0 0 0 0.5rem rgb(61 220 151 / 18%), 0 0.8rem 1.8rem rgb(8 114 216 / 18%);
+			box-shadow:
+				0 0 0 0.5rem rgb(61 220 151 / 18%),
+				0 0.8rem 1.8rem rgb(8 114 216 / 18%);
 		}
 
 		.point-card {
@@ -1365,7 +1563,10 @@ function renderIcon(name: IconName) {
 			background: transparent;
 			padding: 0.45rem 0.2rem;
 			color: #64748b;
-			transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
+			transition:
+				background-color 220ms ease,
+				color 220ms ease,
+				transform 220ms ease;
 		}
 
 		.tab-button span {
