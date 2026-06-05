@@ -186,6 +186,19 @@ const scaleDots = Array.from({ length: 20 }, (_, index) => {
 								</div>
 							)}
 
+							{slide.visual.type === 'demo' && (
+								<div class="demo-visual" aria-label="Previsualización de la app móvil y la web FiberLoop">
+									<div class="demo-browser demo-web">
+										<div class="demo-chrome"><span></span><span></span><span></span></div>
+										<iframe src="/web" title="Previsualización de la web FiberLoop" loading="lazy" tabindex="-1"></iframe>
+									</div>
+									<div class="demo-browser demo-app">
+										<div class="demo-chrome"><span></span><span></span><span></span></div>
+										<iframe src="/mobile" title="Previsualización de la app móvil FiberLoop" loading="lazy" tabindex="-1"></iframe>
+									</div>
+								</div>
+							)}
+
 							{slide.visual.type === 'thanks' && (
 								<div class="thanks-visual" aria-label="Cierre FiberLoop">
 									<div class="thanks-ring"><img src="/fiberloop-logo.png" alt="" /></div>
@@ -702,6 +715,7 @@ const scaleDots = Array.from({ length: 20 }, (_, index) => {
 	.scale-visual,
 	.impact-visual,
 	.risk-visual,
+	.demo-visual,
 	.thanks-visual {
 		position: relative;
 		width: min(100%, 31rem);
@@ -1069,9 +1083,90 @@ const scaleDots = Array.from({ length: 20 }, (_, index) => {
 	}
 
 	.risk-visual,
+	.demo-visual,
 	.thanks-visual {
 		display: grid;
 		place-items: center;
+	}
+
+	.demo-visual {
+		isolation: isolate;
+	}
+
+	.demo-visual::before {
+		content: '';
+		position: absolute;
+		inset: 8% 2% 2% 8%;
+		z-index: -1;
+		border-radius: 2rem;
+		background:
+			radial-gradient(circle at 30% 28%, rgb(61 220 151 / 26%), transparent 9rem),
+			radial-gradient(circle at 74% 70%, rgb(22 143 242 / 20%), transparent 10rem),
+			linear-gradient(135deg, rgb(255 255 255 / 74%), rgb(232 252 243 / 72%));
+		box-shadow: 0 1.35rem 3.4rem rgb(15 23 42 / 12%);
+	}
+
+	.demo-browser {
+		position: absolute;
+		overflow: hidden;
+		border: 0.28rem solid #fff;
+		border-radius: 1.15rem;
+		background: #fff;
+		box-shadow: 0 1.25rem 3rem rgb(15 23 42 / 17%);
+	}
+
+	.demo-browser iframe {
+		display: block;
+		width: 100%;
+		height: calc(100% - 1.45rem);
+		border: 0;
+		pointer-events: none;
+	}
+
+	.demo-chrome {
+		display: flex;
+		align-items: center;
+		gap: 0.28rem;
+		height: 1.45rem;
+		background: linear-gradient(90deg, #0b2030, #123a52);
+		padding-inline: 0.55rem;
+	}
+
+	.demo-chrome span {
+		width: 0.42rem;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--deck-mint);
+		opacity: 0.78;
+	}
+
+	.demo-web {
+		inset: 7% 3% 18% 4%;
+		transform: rotate(-1.4deg);
+	}
+
+	.demo-web iframe {
+		transform: scale(0.44);
+		transform-origin: 0 0;
+		width: 227%;
+		height: 227%;
+	}
+
+	.demo-app {
+		right: 4%;
+		bottom: 4%;
+		width: 31%;
+		height: 68%;
+		border-width: 0.36rem;
+		border-radius: 1.8rem;
+		transform: rotate(4deg);
+	}
+
+	.demo-app iframe {
+		transform: scale(0.36);
+		transform-origin: 0 0;
+		width: 278%;
+		height: 278%;
 	}
 
 	.risk-ring,

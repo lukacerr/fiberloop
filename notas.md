@@ -72,14 +72,31 @@
 
 ### Diapositiva 11
 
+- Presentar la inversión como condición necesaria para que el prototipo pase de idea a piloto real.
+- Explicar la estructura de costos: fabricación de hardware, sensores de flujo y saturación, filtros, conectividad Bluetooth/WiFi, desarrollo de software y mantenimiento.
+- Mencionar la viabilidad económica: estos costos podrían abordarse mediante acuerdos público-privados, involucrando municipios, fabricantes e incentivos públicos.
+- Explicar el sistema de incentivos: beneficios, descuentos o subsidios municipales para usuarios que entreguen cartuchos con microplásticos recuperados.
+- Conectar la inversión con economía circular: el sistema se retroalimenta si la recolección se vuelve hábito y el material recuperado puede gestionarse como insumo.
+- Punto obligatorio: la inversión no es solo costo inicial; también sostiene recolección, recompensas y adopción.
+
+### Diapositiva 12
+
 - Presentar esta diapositiva como respuesta a la pregunta: qué tan viable es llevar FiberLoop a una prueba real.
 - Mencionar que las tecnologías necesarias ya existen: sensores capacitivos, microcontroladores, sistemas de filtrado, Bluetooth, WiFi y aplicaciones móviles.
 - Explicar implementación gradual: primero dispositivos domésticos adaptables, luego pruebas en edificios o instituciones, después acuerdos con fabricantes y municipios.
-- Incluir viabilidad económica: costos de fabricación, sensores, filtros, software, mantenimiento y recolección podrían abordarse con municipios, fabricantes, incentivos públicos o acuerdos público-privados.
 - Aclarar que la escala industrial queda como línea futura por caudales mayores y necesidad de más estudios técnicos y económicos.
 - Punto obligatorio: FiberLoop es viable como implementación gradual, no como despliegue industrial inmediato.
 
-### Diapositiva 12
+### Diapositiva 13
+
+- Presentar esta diapositiva como transición del concepto a la demo navegable.
+- Explicar que el proyecto tiene dos superficies principales: la app móvil y la web promocional.
+- En la app, mostrar estado del filtro, saturación, QR del cartucho, historial, recompensas y puntos de entrega.
+- En la web, mostrar cómo se comunica el problema, la solución, los casos de uso y el impacto estimado.
+- Usar los botones de la diapositiva para abrir `/mobile` y `/web` durante la exposición si hay tiempo.
+- Punto obligatorio: aclarar que son mocks estáticos sin backend, pensados para demostrar la experiencia y comunicar la propuesta.
+
+### Diapositiva 14
 
 - Cerrar con la síntesis del trabajo: actuar en el origen, medir el impacto, gestionar los cartuchos y sostener el hábito con incentivos.
 - Recordar que el problema conecta hábitos cotidianos, consumo textil, contaminación hídrica, aire exterior en secado y economía circular.

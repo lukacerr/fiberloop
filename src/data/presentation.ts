@@ -30,6 +30,7 @@ export type PresentationVisual =
 	| { type: 'scale' }
 	| { type: 'impact' }
 	| { type: 'risk' }
+	| { type: 'demo' }
 	| { type: 'thanks' };
 
 export interface PresentationCard {
@@ -330,6 +331,35 @@ export const presentationSlides: PresentationSlide[] = [
 		],
 	},
 	{
+		eyebrow: 'Inversión',
+		title: 'Costo e inversión',
+		lead: 'La propuesta requiere inversión inicial, pero puede sostenerse con alianzas e incentivos que cierren el ciclo de recolección.',
+		variant: 'cards',
+		tone: 'orange',
+		animation: 'cascade',
+		visual: { type: 'flow' },
+		cards: [
+			{
+				title: 'Estructura de costos',
+				description:
+					'Hardware, sensores, filtros, conectividad, software y mantenimiento.',
+				icon: 'sensor',
+			},
+			{
+				title: 'Viabilidad económica',
+				description:
+					'Acuerdos público-privados con municipios, fabricantes e incentivos públicos.',
+				icon: 'building',
+			},
+			{
+				title: 'Sistema de incentivos',
+				description:
+					'Beneficios, descuentos o subsidios por entregar cartuchos recuperados.',
+				icon: 'gift',
+			},
+		],
+	},
+	{
 		eyebrow: 'Viabilidad',
 		title: 'Viable como implementación gradual',
 		lead: 'Las tecnologías ya existen; el desafío es validar captura, mantenimiento, costos y adopción antes de escalar.',
@@ -360,6 +390,39 @@ export const presentationSlides: PresentationSlide[] = [
 				title: 'Escala futura',
 				description: 'Industria textil con más estudios técnicos y económicos.',
 				icon: 'chart',
+			},
+		],
+	},
+	{
+		eyebrow: 'Demo',
+		title: 'Del concepto al mock interactivo',
+		lead: 'La presentación continúa mostrando dos piezas estáticas: la app móvil para usuarios y la web promocional del proyecto.',
+		variant: 'split',
+		tone: 'mint',
+		animation: 'slide-left',
+		visual: { type: 'demo' },
+		links: [
+			{
+				label: 'Abrir app móvil',
+				href: '/mobile',
+			},
+			{
+				label: 'Abrir web',
+				href: '/web',
+			},
+		],
+		cards: [
+			{
+				title: 'App',
+				description:
+					'Estado del filtro, QR, historial, recompensas y puntos de entrega.',
+				icon: 'phone',
+			},
+			{
+				title: 'Web',
+				description:
+					'Contexto del problema, solución, casos de uso e impacto estimado.',
+				icon: 'web',
 			},
 		],
 	},
