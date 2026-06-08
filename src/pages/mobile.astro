@@ -28,41 +28,41 @@ const iconPaths: Record<IconName, string> = {
 const stats = [
 	{ value: '42,8 g', label: 'microfibras estimadas', accent: 'blue' },
 	{ value: '126', label: 'lavados registrados', accent: 'mint' },
-	{ value: '9 dias', label: 'hasta revision', accent: 'reward' },
+	{ value: '9 días', label: 'hasta revisión', accent: 'reward' },
 ];
 
 const programStats = [
 	{ value: '14', label: 'cartuchos entregados' },
-	{ value: '38', label: 'usuarios activos mock' },
+	{ value: '38', label: 'usuarios activos' },
 	{ value: '3 zonas', label: 'con datos agregados' },
 ];
 
 const cartridgeEvents = [
 	{ label: 'Instalado', value: '12 May', state: 'done' },
 	{ label: 'Lectura de flujo normal', value: '13 May', state: 'done' },
-	{ label: 'Saturacion 68%', value: 'hoy', state: 'active' },
-	{ label: 'Alerta de recambio programada', value: '9 dias', state: 'next' },
+	{ label: 'Saturación 68%', value: 'hoy', state: 'active' },
+	{ label: 'Alerta de recambio programada', value: '9 días', state: 'next' },
 ];
 
 const historyEvents = [
 	{
 		title: 'Lavado ropa deportiva',
-		meta: 'Hoy - 0,42 g estimados',
+		meta: 'Hoy · 0,42 g estimados',
 		kind: 'Lavado',
 	},
 	{
-		title: 'Lavado prendas sinteticas',
-		meta: 'Ayer - 0,36 g estimados',
+		title: 'Lavado prendas sintéticas',
+		meta: 'Ayer · 0,36 g estimados',
 		kind: 'Lavado',
 	},
 	{
 		title: 'Recambio de cartucho',
-		meta: 'Lun - FL-24-A91 listo para entrega',
+		meta: 'Lun · FL-24-A91 listo para entrega',
 		kind: 'Recambio',
 	},
 	{
 		title: 'Entrega en Punto Verde',
-		meta: '12 May - +180 eco-puntos',
+		meta: '12 May · +180 eco-puntos',
 		kind: 'Entrega',
 	},
 ];
@@ -79,10 +79,10 @@ const collectionPoints = [
 	},
 	{
 		id: 'escuela',
-		name: 'Escuela Tecnica 12',
+		name: 'Escuela Técnica 12',
 		distance: '1,1 km',
-		hours: 'Recepcion de 9 a 15',
-		action: 'Campana de recoleccion semanal',
+		hours: 'Recepción de 9 a 15',
+		action: 'Campaña de recolección semanal',
 		x: '33%',
 		y: '58%',
 	},
@@ -146,8 +146,8 @@ function renderIcon(name: IconName) {
 ---
 
 <BaseLayout
-	title="FiberLoop | Mock app movil"
-	description="Mock interactivo de la app movil FiberLoop con estado del filtro, cartucho, historial, puntos de recoleccion, beneficios y QR."
+	title="FiberLoop | Mock app móvil"
+	description="Mock interactivo de la app móvil FiberLoop con estado del filtro, cartucho, historial, puntos de recolección, beneficios y QR."
 	bodyClass="mobile-demo-page bg-fiber-surface text-slate-950"
 >
 	<main class="mobile-demo-shell">
@@ -155,10 +155,10 @@ function renderIcon(name: IconName) {
 			<a href="/" class="back-link">Volver al inicio</a>
 			<img src="/fiberloop-logo.png" alt="FiberLoop" class="context-logo" />
 			<p class="context-kicker">Mock interactivo</p>
-			<h1 id="mobile-title">La experiencia movil del cartucho FiberLoop.</h1>
+			<h1 id="mobile-title">La experiencia móvil del cartucho FiberLoop.</h1>
 			<p>
 				Simula el flujo del PDF: capturar, medir, notificar, registrar entrega
-				por QR, asignar beneficios y generar metricas anonimizadas.
+				por QR, asignar beneficios y generar métricas anonimizadas.
 			</p>
 			<div class="context-actions">
 				<a href="/web">Ver web</a>
@@ -166,7 +166,7 @@ function renderIcon(name: IconName) {
 			</div>
 		</section>
 
-		<section class="phone-stage" aria-label="Mock de app movil FiberLoop">
+		<section class="phone-stage" aria-label="Mock de app móvil FiberLoop">
 			<div class="phone-frame">
 				<div class="phone-speaker" aria-hidden="true"></div>
 				<div class="app-screen" data-mobile-app>
@@ -197,11 +197,11 @@ function renderIcon(name: IconName) {
 									<span class="state-pill">Flujo OK</span>
 									<h3>Filtro al 68%</h3>
 									<p>
-										Revisar en 9 dias. La captura estimada sigue dentro del
+										Revisar en 9 días. La captura estimada sigue dentro del
 										rango esperado.
 									</p>
 								</div>
-								<div class="filter-orb" aria-label="Saturacion del filtro 68%">
+								<div class="filter-orb" aria-label="Saturación del filtro 68%">
 									<div class="orb-water"></div>
 									<span>68%</span>
 									<i></i>
@@ -225,23 +225,23 @@ function renderIcon(name: IconName) {
 									<strong>25%</strong>
 								</div>
 								<p>
-									Objetivo de reduccion en hogares e instituciones adheridas
-									durante el primer ano de prueba.
+									Objetivo de reducción en hogares e instituciones adheridas
+									durante el primer año de prueba.
 								</p>
 								<div
 									class="goal-progress"
-									aria-label="Seguimiento estimado 18 por ciento"
+									aria-label="18 por ciento alcanzado de la meta de 25 por ciento"
 								>
 									<i></i>
 								</div>
-								<small>18% estimado en seguimiento</small>
+								<small>18% alcanzado · meta 25%</small>
 							</div>
 
 							<div class="notice-card">
 								<span set:html={renderIcon("sensor")} />
 								<div>
-									<strong>Recambio sugerido en 9 dias</strong>
-									<p>Sensor activo. Ultima lectura hace 12 minutos.</p>
+									<strong>Recambio sugerido en 9 días</strong>
+									<p>Sensor activo. Última lectura hace 12 minutos.</p>
 								</div>
 							</div>
 
@@ -278,7 +278,7 @@ function renderIcon(name: IconName) {
 								</div>
 								<div>
 									<span class="state-pill warning">Revisar pronto</span>
-									<h4>68% saturacion</h4>
+									<h4>68% saturación</h4>
 									<p>
 										Instalado el 12 May. Compatible con salida de agua del
 										lavarropas.
@@ -301,12 +301,12 @@ function renderIcon(name: IconName) {
 								</article>
 								<article>
 									<span set:html={renderIcon("sensor")} /><strong
-										>Obstruccion</strong
+										>Obstrucción</strong
 									><p>Baja</p>
 								</article>
 								<article>
 									<span set:html={renderIcon("check")} /><strong
-										>Conexion</strong
+										>Conexión</strong
 									><p>Bluetooth</p>
 								</article>
 							</div>
@@ -344,7 +344,7 @@ function renderIcon(name: IconName) {
 									<span>Mayo</span><strong>8,4 g</strong><small
 										>estimados recuperados</small>
 								</div>
-								<div class="bars" aria-label="Actividad mensual mock">
+								<div class="bars" aria-label="Actividad mensual estimada">
 									<span style="height: 34%"></span><span style="height: 58%"
 									></span><span style="height: 42%"></span><span
 										style="height: 76%"></span><span style="height: 62%"
@@ -387,12 +387,12 @@ function renderIcon(name: IconName) {
 							hidden
 						>
 							<div class="screen-title">
-								<p>Recoleccion</p>
+								<p>Recolección</p>
 								<h3>Puntos cercanos</h3>
 							</div>
 							<div
 								class="mock-map"
-								aria-label="Mapa simulado de puntos de recoleccion"
+								aria-label="Mapa simulado de puntos de recolección"
 							>
 								{
 									collectionPoints.map((point, index) => (
@@ -492,7 +492,7 @@ function renderIcon(name: IconName) {
 							<div class="scan-card" data-scan-card>
 								<div
 									class="qr-box"
-									aria-label="Codigo QR simulado del cartucho FL-24-A91"
+									aria-label="Código QR simulado del cartucho FL-24-A91"
 								>
 									{
 										qrCells.map((cell) => (
@@ -511,13 +511,13 @@ function renderIcon(name: IconName) {
 								<ul data-scan-results>
 									<li>Entrega pendiente</li>
 									<li>Eco-puntos por asignar</li>
-									<li>Datos aun no enviados</li>
+									<li>Datos aún no enviados</li>
 								</ul>
 							</div>
 							<div class="privacy-note">
 								<strong>Privacidad</strong>
 								<p>
-									Datos anonimizados y agregados para estadisticas ambientales
+									Datos anonimizados y agregados para estadísticas ambientales
 									municipales.
 								</p>
 							</div>
@@ -532,7 +532,7 @@ function renderIcon(name: IconName) {
 					<nav
 						class="app-tabbar"
 						role="tablist"
-						aria-label="Navegacion de la app FiberLoop"
+						aria-label="Navegación de la app FiberLoop"
 					>
 						{
 							tabs.map((tab, index) => (

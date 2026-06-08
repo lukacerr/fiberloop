@@ -1,0 +1,849 @@
+---
+import WebNav from '@/components/WebNav.astro';
+import {
+	captureChannels,
+	circularStats,
+	dataDisclaimer,
+	defaultRange,
+	globalKpis,
+	goalProgress,
+	materialMix,
+	rangeSeries,
+	topZones,
+} from '@/data/fiberloop';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const activeRange =
+	rangeSeries.find((range) => range.id === defaultRange) ?? rangeSeries[0];
+
+const materialColors = ['#0872d8', '#57c8ff', '#3ddc97', '#f6c453'];
+
+const references = [
+	'PNUMA (2021) · From pollution to solution',
+	'European Environment Agency (2022) · Microplastics from textiles',
+	'IUCN · Boucher & Friot (2017)',
+	'De Falco et al. (2019) · Gaylarde et al. (2021)',
+];
+---
+
+<BaseLayout
+	title="FiberLoop | Estadísticas globales"
+	description="Tablero público con estadísticas y gráficos mock del impacto global de FiberLoop: microfibras capturadas, cartuchos recolectados y evolución diaria, semanal, mensual, anual e histórica."
+	bodyClass="bg-fiber-surface text-slate-950"
+>
+	<WebNav current="estadisticas" />
+
+	<main class="stats-page overflow-hidden">
+		<!-- Hero -->
+		<section class="relative mx-auto max-w-7xl px-5 pt-12 pb-6 sm:px-8 lg:pt-16">
+			<div class="absolute inset-x-0 top-0 -z-10 h-[34rem] bg-[radial-gradient(circle_at_16%_12%,rgba(87,200,255,0.22),transparent_26rem),radial-gradient(circle_at_84%_18%,rgba(61,220,151,0.18),transparent_24rem)]"></div>
+			<div class="flex flex-wrap items-center gap-3">
+				<p class="section-kicker">Impacto público · datos demostrativos</p>
+				<span class="live-badge">
+					<span class="live-dot" aria-hidden="true"></span>
+					Red FiberLoop · actualización simulada
+				</span>
+			</div>
+			<h1 class="mt-5 max-w-4xl text-balance text-5xl font-black leading-[0.95] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
+				El impacto global, a la vista de todos.
+			</h1>
+			<p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+				Cuántas microfibras evitamos que lleguen al agua y al aire, cuántos cartuchos se recolectan y cómo crece la red. Son datos <strong class="font-black text-fiber-blue-700">agregados y globales</strong>, nunca individuales.
+			</p>
+			<p class="mt-5 inline-flex items-start gap-2 rounded-2xl border border-fiber-reward/40 bg-fiber-reward/10 px-4 py-2.5 text-sm font-semibold leading-6 text-amber-800">
+				<span aria-hidden="true">⚠</span>
+				Cifras mock para la demo del TP. No representan un despliegue real.
+			</p>
+		</section>
+
+		<!-- KPIs -->
+		<section class="mx-auto max-w-7xl px-5 py-6 sm:px-8" aria-label="Indicadores acumulados de la red">
+			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				{
+					globalKpis.map((kpi) => (
+						<article class="kpi-card">
+							<div class="flex items-start justify-between gap-3">
+								<span class="kpi-label">{kpi.label}</span>
+								<span class:list={['kpi-delta', kpi.trend === 'up' ? 'is-up' : 'is-down']}>
+									<span aria-hidden="true">{kpi.trend === 'up' ? '↑' : '↓'}</span>
+									{kpi.delta}
+								</span>
+							</div>
+							<strong class="kpi-value">{kpi.value}</strong>
+							<p class="kpi-hint">{kpi.hint}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<noscript>
+			<div class="mx-auto max-w-7xl px-5 sm:px-8">
+				<p class="rounded-2xl border border-fiber-blue-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600">
+					Los gráficos interactivos necesitan JavaScript. Los indicadores numéricos de arriba se muestran igual.
+				</p>
+			</div>
+		</noscript>
+
+		<!-- Evolución (chart toggled) -->
+		<section class="mx-auto max-w-7xl px-5 py-6 sm:px-8">
+			<div class="stat-card p-5 sm:p-7">
+				<div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+					<div>
+						<p class="section-kicker">Evolución de la red</p>
+						<h2 class="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Captura a lo largo del tiempo</h2>
+						<p class="mt-2 text-sm font-semibold text-slate-500" id="readout-scope">{activeRange.scope}</p>
+					</div>
+					<div class="range-toggle" role="group" aria-label="Elegir rango temporal">
+						{
+							rangeSeries.map((range) => (
+								<button
+									type="button"
+									data-range={range.id}
+									aria-pressed={range.id === defaultRange ? 'true' : 'false'}
+									class:list={['range-chip', range.id === defaultRange && 'is-active']}
+								>
+									{range.label}
+								</button>
+							))
+						}
+					</div>
+				</div>
+
+				<div class="mt-5 grid gap-3 sm:grid-cols-3" aria-live="polite">
+					<div class="readout-block">
+						<span>Microfibras del período</span>
+						<strong id="readout-micro">{activeRange.totalMicrofibras}</strong>
+					</div>
+					<div class="readout-block">
+						<span>Cartuchos del período</span>
+						<strong id="readout-cart">{activeRange.totalCartuchos}</strong>
+					</div>
+					<div class="readout-block">
+						<span>Variación <em id="readout-delta-label">{activeRange.deltaLabel}</em></span>
+						<strong class="text-emerald-600" id="readout-delta">{activeRange.delta}</strong>
+					</div>
+				</div>
+
+				<div class="mt-6">
+					<p class="chart-caption">Microfibras capturadas (kg)</p>
+					<div id="chart-microfibras" class="chart-canvas chart-area" role="img" aria-label="Gráfico de microfibras capturadas en kilogramos por período"></div>
+				</div>
+
+				<div class="mt-6 border-t border-fiber-blue-100 pt-5">
+					<p class="chart-caption">Cartuchos recolectados (unidades)</p>
+					<div id="chart-cartuchos" class="chart-canvas chart-column" role="img" aria-label="Gráfico de cartuchos recolectados por período"></div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Detalle: materiales / meta / zonas -->
+		<section class="mx-auto max-w-7xl px-5 py-6 sm:px-8">
+			<div class="grid gap-4 lg:grid-cols-12">
+				<article class="stat-card p-5 sm:p-6 lg:col-span-4">
+					<p class="section-kicker">Composición</p>
+					<h3 class="card-title">Microfibras por tipo de textil</h3>
+					<div id="chart-materiales" class="chart-canvas chart-donut" role="img" aria-label="Distribución de microfibras capturadas por tipo de textil"></div>
+					<ul class="legend-list">
+						{
+							materialMix.labels.map((label, index) => (
+								<li>
+									<span class="legend-dot" style={`background:${materialColors[index]}`} aria-hidden="true" />
+									<span class="legend-name">{label}</span>
+									<span class="legend-value">{materialMix.values[index]}%</span>
+								</li>
+							))
+						}
+					</ul>
+				</article>
+
+				<article class="stat-card p-5 sm:p-6 lg:col-span-4">
+					<p class="section-kicker">Objetivo</p>
+					<h3 class="card-title">Avance hacia la meta 25%</h3>
+					<div id="chart-meta" class="chart-canvas chart-radial" role="img" aria-label={`Avance del ${goalProgress.percent}% hacia la meta de reducción del 25%`}></div>
+					<p class="goal-caption">
+						<strong>{goalProgress.reached}</strong> de reducción estimada sobre la meta de <strong>{goalProgress.target}</strong> del primer año en pilotos.
+					</p>
+				</article>
+
+				<article class="stat-card p-5 sm:p-6 lg:col-span-4">
+					<p class="section-kicker">Territorio</p>
+					<h3 class="card-title">Top zonas por captura</h3>
+					<div id="chart-zonas" class="chart-canvas chart-zones" role="img" aria-label="Ranking de zonas por kilogramos de microfibras capturadas"></div>
+				</article>
+			</div>
+		</section>
+
+		<!-- Vías de captura + economía circular -->
+		<section class="mx-auto max-w-7xl px-5 py-6 sm:px-8">
+			<div class="grid gap-4 lg:grid-cols-12">
+				<article class="stat-card p-5 sm:p-7 lg:col-span-5">
+					<p class="section-kicker">Vías de captura</p>
+					<h3 class="card-title">De dónde sale el material</h3>
+					<p class="mt-2 text-sm leading-6 text-slate-500">
+						FiberLoop retiene microfibras tanto del agua de desagüe del lavado como del aire húmedo expulsado en el secado.
+					</p>
+					<div class="mt-6 grid gap-5">
+						{
+							captureChannels.map((channel, index) => (
+								<div class="channel">
+									<div class="flex items-center justify-between">
+										<span class="channel-label">{channel.label}</span>
+										<strong class="channel-value">{channel.value}%</strong>
+									</div>
+									<div class="channel-track">
+										<div
+											class:list={['channel-fill', index === 0 ? 'is-water' : 'is-air']}
+											style={`width:${channel.value}%`}
+										/>
+									</div>
+								</div>
+							))
+						}
+					</div>
+				</article>
+
+				<article class="stat-card p-5 sm:p-7 lg:col-span-7">
+					<p class="section-kicker">Economía circular</p>
+					<h3 class="card-title">Qué pasa después de la captura</h3>
+					<div class="mt-6 grid gap-4 sm:grid-cols-3">
+						{
+							circularStats.map((stat) => (
+								<div class="circular-chip">
+									<strong>{stat.value}</strong>
+									<span class="circular-chip-label">{stat.label}</span>
+									<p>{stat.hint}</p>
+								</div>
+							))
+						}
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<!-- Fuentes / disclaimer -->
+		<section class="mx-auto max-w-7xl px-5 py-6 sm:px-8">
+			<div class="sources-card">
+				<div>
+					<p class="section-kicker text-fiber-blue-700">Sobre estos datos</p>
+					<p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{dataDisclaimer}</p>
+				</div>
+				<ul class="sources-list">
+					{references.map((reference) => <li>{reference}</li>)}
+				</ul>
+			</div>
+		</section>
+
+		<!-- CTA -->
+		<section class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-16">
+			<div class="cta-shell">
+				<div>
+					<h2 class="text-balance text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+						Detrás de cada número hay un cartucho que no llegó al río.
+					</h2>
+					<p class="mt-4 max-w-2xl text-lg leading-8 text-slate-200">
+						Explorá cómo se ve la experiencia de usuario o volvé al concepto completo del proyecto.
+					</p>
+				</div>
+				<div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
+					<a href="/mobile" class="cta-primary">Abrir app mock</a>
+					<a href="/web" class="cta-ghost">Volver a la web</a>
+					<a href="/presentacion" class="cta-ghost">Ver presentación</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="border-t border-fiber-blue-100 bg-white px-5 py-8 sm:px-8">
+		<div class="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+			<p class="font-bold text-slate-700">FiberLoop · Tablero público de impacto (mock)</p>
+			<p>Datos estimados y agregados · Sin información individual de usuarios.</p>
+		</div>
+	</footer>
+
+	<script>
+		import ApexCharts from 'apexcharts';
+		import {
+			defaultRange,
+			goalProgress,
+			materialMix,
+			rangeSeries,
+			topZones,
+		} from '../../data/fiberloop';
+
+		const brand = {
+			blue: '#0872d8',
+			blueSoft: '#168ff2',
+			cyan: '#57c8ff',
+			mint: '#3ddc97',
+			reward: '#f6c453',
+			ink: '#0f172a',
+			muted: '#64748b',
+			grid: '#e2eef7',
+		};
+
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const fmt = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 });
+		const animations = { enabled: !reduceMotion, speed: 600, easing: 'easeinout' as const };
+
+		const byId = (id: string) => rangeSeries.find((range) => range.id === id) ?? rangeSeries[0];
+		let current = byId(defaultRange);
+
+		const axisLabelStyle = { colors: brand.muted, fontSize: '12px', fontWeight: 600 };
+		const sharedGrid = {
+			borderColor: brand.grid,
+			strokeDashArray: 5,
+			padding: { left: 8, right: 8 },
+		};
+
+		function mount(selector: string, options: object) {
+			const el = document.querySelector(selector);
+			if (!el) return null;
+			const chart = new ApexCharts(el, options);
+			chart.render();
+			return chart;
+		}
+
+		// Área: microfibras
+		const areaChart = mount('#chart-microfibras', {
+			chart: { type: 'area', height: 340, fontFamily: 'inherit', toolbar: { show: false }, zoom: { enabled: false }, animations, parentHeightOffset: 0 },
+			series: [{ name: 'Microfibras (kg)', data: current.microfibras }],
+			colors: [brand.blueSoft],
+			dataLabels: { enabled: false },
+			stroke: { curve: 'smooth', width: 3 },
+			fill: {
+				type: 'gradient',
+				gradient: { shadeIntensity: 1, gradientToColors: [brand.cyan], opacityFrom: 0.42, opacityTo: 0.02, stops: [0, 95] },
+			},
+			markers: { size: 0, strokeColors: '#fff', hover: { size: 6 } },
+			xaxis: { categories: current.categories, labels: { style: axisLabelStyle }, axisBorder: { show: false }, axisTicks: { show: false }, tooltip: { enabled: false } },
+			yaxis: { labels: { style: axisLabelStyle, formatter: (val: number) => `${fmt.format(val)} kg` } },
+			grid: sharedGrid,
+			tooltip: { theme: 'light', y: { formatter: (val: number) => `${fmt.format(val)} kg` } },
+		});
+
+		// Columnas: cartuchos
+		const columnChart = mount('#chart-cartuchos', {
+			chart: { type: 'bar', height: 230, fontFamily: 'inherit', toolbar: { show: false }, animations },
+			series: [{ name: 'Cartuchos', data: current.cartuchos }],
+			colors: [brand.mint],
+			plotOptions: { bar: { borderRadius: 6, columnWidth: '52%', borderRadiusApplication: 'end' } },
+			dataLabels: { enabled: false },
+			fill: { type: 'gradient', gradient: { gradientToColors: [brand.blueSoft], shadeIntensity: 0.6, opacityFrom: 0.95, opacityTo: 0.85, stops: [0, 100] } },
+			xaxis: { categories: current.categories, labels: { style: axisLabelStyle }, axisBorder: { show: false }, axisTicks: { show: false } },
+			yaxis: { labels: { style: axisLabelStyle, formatter: (val: number) => fmt.format(val) } },
+			grid: sharedGrid,
+			tooltip: { theme: 'light' },
+		});
+
+		// Donut: materiales
+		mount('#chart-materiales', {
+			chart: { type: 'donut', height: 260, fontFamily: 'inherit', animations },
+			series: materialMix.values,
+			labels: materialMix.labels,
+			colors: [brand.blue, brand.cyan, brand.mint, brand.reward],
+			stroke: { width: 2, colors: ['#ffffff'] },
+			dataLabels: { enabled: true, formatter: (val: number) => `${Math.round(val)}%`, style: { fontSize: '12px', fontWeight: '700' }, dropShadow: { enabled: false } },
+			legend: { show: false },
+			plotOptions: { pie: { donut: { size: '68%', labels: { show: true, value: { fontSize: '26px', fontWeight: 900, color: brand.ink }, total: { show: true, label: 'Textiles', fontWeight: 700, color: brand.muted, formatter: () => '4 tipos' } } } } },
+			tooltip: { theme: 'light', y: { formatter: (val: number) => `${val}%` } },
+		});
+
+		// Radial: meta 25%
+		mount('#chart-meta', {
+			chart: { type: 'radialBar', height: 280, fontFamily: 'inherit', animations },
+			series: [goalProgress.percent],
+			labels: ['sobre la meta 25%'],
+			colors: [brand.mint],
+			plotOptions: {
+				radialBar: {
+					hollow: { size: '60%' },
+					track: { background: '#e2eef7', strokeWidth: '100%' },
+					dataLabels: {
+						name: { offsetY: 26, color: brand.muted, fontSize: '13px', fontWeight: 600 },
+						value: { offsetY: -14, color: brand.ink, fontSize: '38px', fontWeight: 900, formatter: () => goalProgress.reached },
+					},
+				},
+			},
+			fill: { type: 'gradient', gradient: { shade: 'light', type: 'horizontal', gradientToColors: [brand.blueSoft], stops: [0, 100] } },
+			stroke: { lineCap: 'round' },
+		});
+
+		// Barras horizontales: zonas
+		mount('#chart-zonas', {
+			chart: { type: 'bar', height: 280, fontFamily: 'inherit', toolbar: { show: false }, animations },
+			series: [{ name: 'kg capturados', data: topZones.map((zone) => zone.kg) }],
+			colors: [brand.blue, brand.blueSoft, brand.cyan, brand.mint, brand.reward],
+			plotOptions: { bar: { horizontal: true, distributed: true, borderRadius: 6, barHeight: '58%', borderRadiusApplication: 'end' } },
+			dataLabels: { enabled: true, formatter: (val: number) => `${val} kg`, offsetX: 30, style: { colors: [brand.ink], fontSize: '12px', fontWeight: '700' } },
+			legend: { show: false },
+			xaxis: { categories: topZones.map((zone) => zone.name), labels: { style: axisLabelStyle }, axisBorder: { show: false }, axisTicks: { show: false } },
+			yaxis: { labels: { style: { colors: brand.ink, fontSize: '13px', fontWeight: 700 } } },
+			grid: { ...sharedGrid, xaxis: { lines: { show: true } }, yaxis: { lines: { show: false } } },
+			tooltip: { theme: 'light', y: { formatter: (val: number) => `${val} kg` } },
+		});
+
+		// Toggle de rango temporal
+		const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-range]'));
+		const readoutMicro = document.querySelector('#readout-micro');
+		const readoutCart = document.querySelector('#readout-cart');
+		const readoutDelta = document.querySelector('#readout-delta');
+		const readoutDeltaLabel = document.querySelector('#readout-delta-label');
+		const readoutScope = document.querySelector('#readout-scope');
+
+		function setRange(id: string) {
+			const range = byId(id);
+			current = range;
+
+			areaChart?.updateOptions({ xaxis: { categories: range.categories } }, false, false);
+			areaChart?.updateSeries([{ name: 'Microfibras (kg)', data: range.microfibras }], !reduceMotion);
+			columnChart?.updateOptions({ xaxis: { categories: range.categories } }, false, false);
+			columnChart?.updateSeries([{ name: 'Cartuchos', data: range.cartuchos }], !reduceMotion);
+
+			if (readoutMicro) readoutMicro.textContent = range.totalMicrofibras;
+			if (readoutCart) readoutCart.textContent = range.totalCartuchos;
+			if (readoutDelta) readoutDelta.textContent = range.delta;
+			if (readoutDeltaLabel) readoutDeltaLabel.textContent = range.deltaLabel;
+			if (readoutScope) readoutScope.textContent = range.scope;
+
+			for (const button of buttons) {
+				const isActive = button.dataset.range === id;
+				button.classList.toggle('is-active', isActive);
+				button.setAttribute('aria-pressed', String(isActive));
+			}
+		}
+
+		for (const button of buttons) {
+			button.addEventListener('click', () => {
+				if (button.dataset.range) setRange(button.dataset.range);
+			});
+		}
+	</script>
+
+	<style>
+		.stats-page {
+			background:
+				linear-gradient(90deg, rgb(22 143 242 / 4%) 1px, transparent 1px),
+				linear-gradient(180deg, #f5fbff 0%, #ffffff 36%, #f5fbff 100%);
+			background-size: 4rem 4rem, auto;
+		}
+
+		.section-kicker {
+			font-size: 0.78rem;
+			font-weight: 950;
+			letter-spacing: 0.24em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		.live-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			border: 1px solid rgb(61 220 151 / 40%);
+			border-radius: 999px;
+			background: rgb(61 220 151 / 12%);
+			padding: 0.35rem 0.75rem;
+			font-size: 0.72rem;
+			font-weight: 800;
+			color: #047857;
+		}
+
+		.live-dot {
+			width: 0.55rem;
+			height: 0.55rem;
+			border-radius: 999px;
+			background: #3ddc97;
+			box-shadow: 0 0 0 0 rgb(61 220 151 / 60%);
+			animation: live-pulse 2s ease-out infinite;
+		}
+
+		/* KPI cards */
+		.kpi-card {
+			display: grid;
+			gap: 0.5rem;
+			align-content: start;
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1.5rem;
+			background: rgb(255 255 255 / 82%);
+			padding: 1.35rem;
+			box-shadow: 0 1rem 2.6rem rgb(8 114 216 / 8%);
+			backdrop-filter: blur(12px);
+			transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+		}
+
+		.kpi-card:hover {
+			transform: translateY(-0.3rem);
+			border-color: #8fd1ff;
+			box-shadow: 0 1.3rem 3.2rem rgb(8 114 216 / 13%);
+		}
+
+		.kpi-label {
+			font-size: 0.82rem;
+			font-weight: 800;
+			color: #536171;
+		}
+
+		.kpi-value {
+			font-size: clamp(2.2rem, 4vw, 2.9rem);
+			font-weight: 950;
+			line-height: 1;
+			letter-spacing: -0.05em;
+			color: #084c8f;
+		}
+
+		.kpi-hint {
+			font-size: 0.8rem;
+			font-weight: 600;
+			line-height: 1.45;
+			color: #64748b;
+		}
+
+		.kpi-delta {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.2rem;
+			border-radius: 999px;
+			padding: 0.25rem 0.55rem;
+			font-size: 0.74rem;
+			font-weight: 900;
+			white-space: nowrap;
+		}
+
+		.kpi-delta.is-up {
+			background: rgb(61 220 151 / 16%);
+			color: #047857;
+		}
+
+		.kpi-delta.is-down {
+			background: rgb(244 63 94 / 12%);
+			color: #be123c;
+		}
+
+		/* Generic stat card */
+		.stat-card {
+			border: 1px solid rgb(188 227 255 / 70%);
+			border-radius: 1.85rem;
+			background: rgb(255 255 255 / 85%);
+			box-shadow: 0 1.2rem 3rem rgb(15 23 42 / 7%);
+			backdrop-filter: blur(12px);
+		}
+
+		.card-title {
+			margin-top: 0.5rem;
+			font-size: 1.3rem;
+			font-weight: 950;
+			letter-spacing: -0.04em;
+			color: #084c8f;
+		}
+
+		/* Range toggle */
+		.range-toggle {
+			display: inline-flex;
+			flex-wrap: wrap;
+			gap: 0.3rem;
+			border: 1px solid rgb(188 227 255 / 80%);
+			border-radius: 999px;
+			background: #f1f8ff;
+			padding: 0.3rem;
+		}
+
+		.range-chip {
+			border: 0;
+			border-radius: 999px;
+			background: transparent;
+			padding: 0.5rem 0.95rem;
+			font-size: 0.82rem;
+			font-weight: 900;
+			color: #4b6173;
+			transition: background-color 220ms ease, color 220ms ease, box-shadow 220ms ease;
+		}
+
+		.range-chip:hover {
+			color: #075aae;
+		}
+
+		.range-chip.is-active {
+			background: #0872d8;
+			color: #fff;
+			box-shadow: 0 0.6rem 1.4rem rgb(8 114 216 / 26%);
+		}
+
+		.range-chip:focus-visible {
+			outline: 3px solid #55b5ff;
+			outline-offset: 2px;
+		}
+
+		/* Readout */
+		.readout-block {
+			border: 1px solid rgb(188 227 255 / 60%);
+			border-radius: 1.1rem;
+			background: #f7fcff;
+			padding: 0.85rem 1rem;
+		}
+
+		.readout-block span {
+			display: block;
+			font-size: 0.74rem;
+			font-weight: 800;
+			color: #64748b;
+		}
+
+		.readout-block span em {
+			font-style: normal;
+			font-weight: 800;
+			color: #94a3b8;
+		}
+
+		.readout-block strong {
+			display: block;
+			margin-top: 0.25rem;
+			font-size: 1.7rem;
+			font-weight: 950;
+			letter-spacing: -0.05em;
+			color: #084c8f;
+		}
+
+		.chart-caption {
+			margin-bottom: 0.25rem;
+			font-size: 0.75rem;
+			font-weight: 900;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: #0872d8;
+		}
+
+		/* Chart canvases: reserve height to avoid layout shift */
+		.chart-canvas {
+			width: 100%;
+		}
+
+		.chart-area { min-height: 340px; }
+		.chart-column { min-height: 230px; }
+		.chart-donut { min-height: 260px; }
+		.chart-radial { min-height: 280px; }
+		.chart-zones { min-height: 280px; }
+
+		/* Legend list (materials) */
+		.legend-list {
+			display: grid;
+			gap: 0.5rem;
+			margin-top: 0.5rem;
+		}
+
+		.legend-list li {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+		}
+
+		.legend-dot {
+			width: 0.7rem;
+			height: 0.7rem;
+			border-radius: 0.25rem;
+		}
+
+		.legend-name {
+			font-size: 0.88rem;
+			font-weight: 800;
+			color: #334155;
+		}
+
+		.legend-value {
+			margin-left: auto;
+			font-size: 0.88rem;
+			font-weight: 950;
+			color: #084c8f;
+		}
+
+		.goal-caption {
+			margin-top: 0.5rem;
+			font-size: 0.85rem;
+			line-height: 1.5;
+			font-weight: 600;
+			color: #64748b;
+		}
+
+		.goal-caption strong {
+			font-weight: 950;
+			color: #047857;
+		}
+
+		/* Capture channels */
+		.channel-label {
+			font-size: 0.92rem;
+			font-weight: 800;
+			color: #334155;
+		}
+
+		.channel-value {
+			font-size: 1.05rem;
+			font-weight: 950;
+			color: #084c8f;
+		}
+
+		.channel-track {
+			margin-top: 0.5rem;
+			height: 0.85rem;
+			overflow: hidden;
+			border-radius: 999px;
+			background: #e3f1fb;
+		}
+
+		.channel-fill {
+			height: 100%;
+			border-radius: inherit;
+		}
+
+		.channel-fill.is-water {
+			background: linear-gradient(90deg, #168ff2, #57c8ff);
+		}
+
+		.channel-fill.is-air {
+			background: linear-gradient(90deg, #3ddc97, #68e6b1);
+		}
+
+		/* Circular economy chips */
+		.circular-chip {
+			display: grid;
+			gap: 0.3rem;
+			align-content: start;
+			border: 1px solid rgb(188 227 255 / 60%);
+			border-radius: 1.25rem;
+			background: linear-gradient(160deg, #ffffff, #eef8ff);
+			padding: 1.1rem;
+		}
+
+		.circular-chip strong {
+			font-size: 1.9rem;
+			font-weight: 950;
+			line-height: 1;
+			letter-spacing: -0.05em;
+			color: #0872d8;
+		}
+
+		.circular-chip-label {
+			font-size: 0.92rem;
+			font-weight: 900;
+			color: #084c8f;
+		}
+
+		.circular-chip p {
+			font-size: 0.78rem;
+			font-weight: 600;
+			line-height: 1.4;
+			color: #64748b;
+		}
+
+		/* Sources */
+		.sources-card {
+			display: grid;
+			gap: 1.25rem;
+			border: 1px dashed rgb(136 197 247 / 70%);
+			border-radius: 1.6rem;
+			background: rgb(247 252 255 / 80%);
+			padding: 1.5rem;
+		}
+
+		@media (min-width: 1024px) {
+			.sources-card {
+				grid-template-columns: 1.4fr 1fr;
+				align-items: center;
+			}
+		}
+
+		.sources-list {
+			display: grid;
+			gap: 0.4rem;
+		}
+
+		.sources-list li {
+			font-size: 0.8rem;
+			font-weight: 700;
+			color: #536171;
+			padding-left: 1rem;
+			position: relative;
+		}
+
+		.sources-list li::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0.45rem;
+			width: 0.4rem;
+			height: 0.4rem;
+			border-radius: 999px;
+			background: #3ddc97;
+		}
+
+		/* CTA */
+		.cta-shell {
+			display: grid;
+			gap: 2rem;
+			border-radius: 2.3rem;
+			background:
+				radial-gradient(circle at 78% 16%, rgb(61 220 151 / 24%), transparent 22rem),
+				linear-gradient(135deg, #075aae, #0872d8 58%, #084c8f);
+			padding: clamp(1.8rem, 5vw, 3.5rem);
+			box-shadow: 0 2rem 5rem rgb(8 114 216 / 28%);
+		}
+
+		@media (min-width: 1024px) {
+			.cta-shell {
+				grid-template-columns: 1fr auto;
+				align-items: center;
+			}
+		}
+
+		.cta-primary,
+		.cta-ghost {
+			display: inline-flex;
+			justify-content: center;
+			border-radius: 999px;
+			padding: 0.9rem 1.4rem;
+			font-weight: 950;
+			text-decoration: none;
+			transition: transform 240ms ease, background-color 240ms ease, border-color 240ms ease;
+		}
+
+		.cta-primary {
+			background: #fff;
+			color: #075aae;
+		}
+
+		.cta-ghost {
+			border: 1px solid rgb(255 255 255 / 45%);
+			color: #fff;
+		}
+
+		.cta-primary:hover,
+		.cta-ghost:hover {
+			transform: translateY(-0.18rem);
+		}
+
+		.cta-ghost:hover {
+			border-color: #fff;
+		}
+
+		.cta-primary:focus-visible,
+		.cta-ghost:focus-visible {
+			outline: 3px solid #68e6b1;
+			outline-offset: 3px;
+		}
+
+		@keyframes live-pulse {
+			0% { box-shadow: 0 0 0 0 rgb(61 220 151 / 55%); }
+			70% { box-shadow: 0 0 0 0.55rem rgb(61 220 151 / 0%); }
+			100% { box-shadow: 0 0 0 0 rgb(61 220 151 / 0%); }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			::before,
+			::after {
+				animation: none !important;
+				transition: none !important;
+			}
+		}
+	</style>
+</BaseLayout>

@@ -1,4 +1,5 @@
 ---
+import WebNav from '@/components/WebNav.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 type IconName =
@@ -130,24 +131,7 @@ function renderIcon(name: IconName) {
 	description="Landing promocional estática de FiberLoop, un prototipo para capturar microfibras textiles antes de que lleguen al ambiente."
 	bodyClass="bg-fiber-surface text-slate-950"
 >
-	<header class="sticky top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
-		<nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8" aria-label="Navegación principal">
-			<a href="/" class="flex items-center gap-3 rounded-full focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4">
-				<img src="/fiberloop-logo.png" alt="FiberLoop" class="h-auto w-40 sm:w-48" />
-			</a>
-			<div class="hidden items-center gap-7 text-sm font-bold text-slate-600 md:flex">
-				<a href="#problema" class="hover:text-fiber-blue-700">Problema</a>
-				<a href="#funciona" class="hover:text-fiber-blue-700">Cómo funciona</a>
-				<a href="#impacto" class="hover:text-fiber-blue-700">Impacto</a>
-			</div>
-			<a
-				href="/mobile"
-				class="rounded-full bg-fiber-blue-600 px-4 py-2 text-sm font-black text-white shadow-lg shadow-fiber-blue-600/20 transition hover:-translate-y-0.5 hover:bg-fiber-blue-700 focus:outline-none focus:ring-2 focus:ring-fiber-blue-400 focus:ring-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-			>
-				Ver app mock
-			</a>
-		</nav>
-	</header>
+	<WebNav current="web" />
 
 	<main class="web-page overflow-hidden">
 		<section class="relative mx-auto grid min-h-[calc(100dvh-4.8rem)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
@@ -325,10 +309,17 @@ function renderIcon(name: IconName) {
 			<div class="impact-shell">
 				<div>
 					<p class="section-kicker text-fiber-mint">Impacto medible</p>
-					<h2 class="text-balance text-4xl font-black leading-tight tracking-tight text-white sm:text-6xl">Dashboard de prueba, no promesa absoluta.</h2>
+					<h2 class="text-balance text-4xl font-black leading-tight tracking-tight text-white sm:text-6xl">Un tablero público para concientizar.</h2>
 					<p class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-						Las métricas son mock para la demo. Sirven para mostrar cómo un municipio o institución podría evaluar cartuchos, zonas y reducción estimada.
+						Las métricas son mock para la demo, pero muestran cómo la red haría visible su impacto global con cortes diarios, semanales, mensuales, anuales e históricos.
 					</p>
+					<a
+						href="/web/estadisticas"
+						class="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-black text-fiber-blue-700 shadow-xl shadow-fiber-blue-900/20 transition hover:-translate-y-0.5 hover:bg-fiber-blue-50 focus:outline-none focus:ring-2 focus:ring-fiber-mint focus:ring-offset-4 focus:ring-offset-fiber-blue-700 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+					>
+						Ver estadísticas globales
+						<span aria-hidden="true">→</span>
+					</a>
 				</div>
 				<div class="grid gap-4 sm:grid-cols-3">
 					{metrics.map((metric) => (
